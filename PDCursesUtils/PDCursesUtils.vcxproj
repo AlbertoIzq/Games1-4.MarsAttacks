@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1eed5f55-e851-4170-bf4e-57c9cf3feacd}</ProjectGuid>
-    <RootNamespace>Games14MarsAttacks</RootNamespace>
+    <ProjectGuid>{877de285-6a72-44de-b6ef-210f41423969}</ProjectGuid>
+    <RootNamespace>PDCursesUtils</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -88,12 +88,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\include;C:\Users\alber\source\repos\AlbertoIzq\StaticLib-Utils\StaticLib-Utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;$(ProjectDir)..\lib\pdcurses.lib;C:\Users\alber\source\repos\AlbertoIzq\StaticLib-Utils\Debug\StaticLib-Utils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\lib\pdcurses.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,11 +141,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\PDCursesUtils\PDCursesUtils.cpp" />
-    <ClCompile Include="Games1-4.MarsAttacks.cpp" />
+    <ClCompile Include="PDCursesUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\PDCursesUtils\PDCursesUtils.h" />
+    <ClInclude Include="PDCursesUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
