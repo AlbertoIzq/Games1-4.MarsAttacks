@@ -18,12 +18,12 @@
     <ClCompile Include="Games1-4.MarsAttacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\PDCursesUtils\PDCursesUtils.cpp">
+    <ClCompile Include="PDCursesUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\PDCursesUtils\PDCursesUtils.h">
+    <ClInclude Include="PDCursesUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

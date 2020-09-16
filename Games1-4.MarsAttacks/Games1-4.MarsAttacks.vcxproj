@@ -141,11 +141,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\PDCursesUtils\PDCursesUtils.cpp" />
     <ClCompile Include="Games1-4.MarsAttacks.cpp" />
+    <ClCompile Include="PDCursesUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\PDCursesUtils\PDCursesUtils.h" />
+    <ClInclude Include="PDCursesUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
