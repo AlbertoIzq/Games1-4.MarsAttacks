@@ -2,7 +2,8 @@
 
 #include "Game.h"
 
-Game::Game() {
+Game::Game()
+    : currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL } {
     setConsoleWindowSize();
 }
 
@@ -13,5 +14,5 @@ void Game::setConsoleWindowSize() {
     //int width{ r.right - r.left };  
     //int height{ r.bottom - r.top};
     // MoveWindow(window_handle, x, y, width, height, redraw_window);
-    MoveWindow(console, r.left, r.top, 607, 550, TRUE); // Values get by setting console size manually when running the program
+    MoveWindow(console, r.left, r.top, 607, 550, TRUE); // Values get by setting console size manually when running the program to have 80 rows and 32 cols
 }

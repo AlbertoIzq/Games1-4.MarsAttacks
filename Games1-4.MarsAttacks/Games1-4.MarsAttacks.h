@@ -179,14 +179,19 @@ struct Position {
 	int y;
 };
 
-/*struct Player {
+struct Size {
+	int width;
+	int height;
+};
+
+struct Player {
 	Position position;
 	Position missile;
 	Size spriteSize;
 	int animation;
 	int lives; // max 3
 	int score;
-};*/
+};
 
 struct Shield {
 	Position position;
@@ -203,7 +208,7 @@ struct AlienSwarm {
 	Position position;
 	AlienState aliens[NUM_ALIEN_ROWS][NUM_ALIEN_COLS];
 	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
-	//Size spriteSize;
+	Size spriteSize;
 	int animation;
 	int direction; // > 0 - for going rigth, < 0 - for going left, 1 or -1
 	int numberOfBombsInPlay;

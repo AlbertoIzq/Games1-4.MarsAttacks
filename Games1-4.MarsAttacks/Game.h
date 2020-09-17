@@ -10,15 +10,13 @@ enum class Game_State
 	GS_GAME_OVER
 };
 
-struct Size {
-	int width;
-	int height;
-};
-
 class Game
 {
 private:
-	Size windowSize;
+	static constexpr Game_State DEF_GAME_STATE = Game_State::GS_PLAY;
+	static constexpr int DEF_LEVEL = 1;
+protected:
+	//Size windowSize;
 	Game_State currentState;
 	int level;
 public:
