@@ -5,7 +5,9 @@
 
 // define must be typed before windows.h; curses.h must be typed before both
 #define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
-#include <windows.h>
+//#include <windows.h> , added in Game.h instead
+
+#include "Games1-4.MarsAttacks.h"
 
 #include <iostream>
 #include <string>
@@ -15,8 +17,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-
-void SetConsoleWindowSize();
 
 // Description and draft code
 /*
@@ -174,34 +174,19 @@ enum class AlienState {
 	EXPLODING
 };
 
-enum class GameState
-{
-	GS_INTRO = 0,
-	GS_HIGH_SCORES,
-	GS_PLAY,
-	GS_PLAYER_DEAD,
-	GS_WAIT,
-	GS_GAME_OVER
-};
-
 struct Position {
 	int x;
 	int y;
 };
 
-struct Size {
-	int width;
-	int height;
-};
-
-struct Player {
+/*struct Player {
 	Position position;
 	Position missile;
 	Size spriteSize;
 	int animation;
 	int lives; // max 3
 	int score;
-};
+};*/
 
 struct Shield {
 	Position position;
@@ -218,7 +203,7 @@ struct AlienSwarm {
 	Position position;
 	AlienState aliens[NUM_ALIEN_ROWS][NUM_ALIEN_COLS];
 	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
-	Size spriteSize;
+	//Size spriteSize;
 	int animation;
 	int direction; // > 0 - for going rigth, < 0 - for going left, 1 or -1
 	int numberOfBombsInPlay;
@@ -230,7 +215,7 @@ struct AlienSwarm {
 
 struct AlienUFO {
 	Position position;
-	Size size;
+	//Size size;
 	int points; // from 50 to 200
 };
 
@@ -241,10 +226,4 @@ struct Score {
 
 struct HighScoreTable {
 	std::vector<Score> scores;
-};
-
-struct Game {
-	Size windowSize;
-	GameState currentState;
-	int level;
 };
