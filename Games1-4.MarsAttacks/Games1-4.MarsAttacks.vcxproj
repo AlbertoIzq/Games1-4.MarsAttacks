@@ -145,6 +145,7 @@
     <ClCompile Include="PDCursesUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Games1-4.MarsAttacks.h" />
     <ClInclude Include="PDCursesUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

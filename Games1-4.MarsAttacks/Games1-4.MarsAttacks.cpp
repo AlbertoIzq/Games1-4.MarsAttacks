@@ -1,17 +1,8 @@
-#include "curses.h"
-#include "StaticLib-Utils.h"
-
-// define must be typed before windows.h; curses.h must be typed before both
-#define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
-#include <windows.h>
-
-#include <iostream>
-
-void SetConsoleWindowSize();
+#include "Games1-4.MarsAttacks.h"
 
 int main(void)
 {
-    //SetConsoleWindowSize();
+    SetConsoleWindowSize();
     return 0;
 }
 
