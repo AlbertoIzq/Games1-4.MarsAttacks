@@ -13,8 +13,8 @@ enum class Game_State
 class Game
 {
 private:
-	static constexpr Game_State DEF_GAME_STATE = Game_State::GS_PLAY;
-	static constexpr int DEF_LEVEL = 1;
+	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_PLAY };
+	static constexpr int DEF_LEVEL{1};
 protected:
 	//Size windowSize;
 	Game_State currentState;
@@ -22,6 +22,6 @@ protected:
 public:
 	Game();
 
-	void setConsoleWindowSize();
+	void setConsoleWindowSize(); // Sets window size to 80 rows and 32 cols
 };
 

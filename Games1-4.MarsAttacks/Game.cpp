@@ -1,6 +1,5 @@
-#include <windows.h> // Used for setConsoleWindowSize
-
 #include "Game.h"
+#include "Games1-4.MarsAttacks.h" // Needed for "windows.h" and setConsoleWindowSize()
 
 Game::Game()
     : currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL } {

@@ -1,23 +1,3 @@
-#pragma once
-
-#include "curses.h"
-#include "StaticLib-Utils.h"
-
-// define must be typed before windows.h; curses.h must be typed before both
-#define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
-//#include <windows.h> , added in Game.h instead
-
-#include "Games1-4.MarsAttacks.h"
-
-#include <iostream>
-#include <string>
-#include <vector>
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::string;
-
 // Description and draft code
 /*
 _____DESCRIPTION_____
@@ -160,19 +140,23 @@ vector of scores
 
 */
 
-enum {
-	SHIELD_SPRITE_HEIGTH = 3,
-	NUM_ALIEN_ROWS = 5,
-	NUM_ALIEN_COLS = 11,
-	MAX_NUM_ALIEN_BOMBS = 3,
-	MAX_NUM_LIVES = 3
-};
+#pragma once
 
-enum class AlienState {
-	ALIVE = 0,
-	DEAD,
-	EXPLODING
-};
+#include "curses.h"
+#include "StaticLib-Utils.h"
+
+// define must be typed before windows.h; curses.h must be typed before both
+#define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
+#include <windows.h> // Used in Game.cpp in setConsoleWindowSize()
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
 
 struct Position {
 	int x;
@@ -184,13 +168,21 @@ struct Size {
 	int height;
 };
 
-struct Player {
-	Position position;
-	Position missile;
-	Size spriteSize;
-	int animation;
-	int lives; // max 3
-	int score;
+/// <summary>
+/// ////////////////////////////////////////////////////
+/// </summary>
+
+enum {
+	SHIELD_SPRITE_HEIGTH = 3,
+	NUM_ALIEN_ROWS = 5,
+	NUM_ALIEN_COLS = 11,
+	MAX_NUM_ALIEN_BOMBS = 3,
+};
+
+enum class AlienState {
+	ALIVE = 0,
+	DEAD,
+	EXPLODING
 };
 
 struct Shield {

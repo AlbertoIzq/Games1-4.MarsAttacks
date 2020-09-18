@@ -144,11 +144,13 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Games1-4.MarsAttacks.cpp" />
     <ClCompile Include="PDCursesUtils.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Games1-4.MarsAttacks.h" />
     <ClInclude Include="PDCursesUtils.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
