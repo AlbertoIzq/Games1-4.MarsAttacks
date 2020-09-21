@@ -14,12 +14,13 @@ enum class Game_State
 
 class Game
 {
+	friend class Player; // To give access to DEF_WINDOW
 private:
 	static const Size DEF_WINDOW; // Initialized in .cpp
 	static const int DEF_WINDOW_WIDTH{ 32 };
-	static const int DEF_WINDOW_HEIGTH{ 80 };
+	static const int DEF_WINDOW_HEIGHT{ 80 };
 	static const int DEF_WINDOW_WIDTH_PIXELS{ 607 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size
-	static const int DEF_WINDOW_HEIGTH_PIXELS{ 550 };
+	static const int DEF_WINDOW_HEIGHT_PIXELS{ 550 };
 	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_PLAY }; // for now - TODO: Change to GS_INTRO
 	static constexpr int DEF_LEVEL{1};
 protected:

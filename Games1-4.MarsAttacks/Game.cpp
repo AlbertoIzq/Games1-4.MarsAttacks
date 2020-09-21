@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Games1-4.MarsAttacks.h" // Needed for "windows.h" and setConsoleWindowSize()
 
-const Size Game::DEF_WINDOW{ DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGTH };
+const Size Game::DEF_WINDOW{ DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT };
 
 Game::Game()
     : windowSize{ DEF_WINDOW }, currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL } {
@@ -15,5 +15,5 @@ void Game::setConsoleWindowSize() {
     //int width{ r.right - r.left };  
     //int height{ r.bottom - r.top};
     // MoveWindow(window_handle, x, y, width, height, redraw_window);
-    MoveWindow(console, r.left, r.top, DEF_WINDOW_WIDTH_PIXELS, DEF_WINDOW_HEIGTH_PIXELS, TRUE);
+    MoveWindow(console, r.left, r.top, DEF_WINDOW_WIDTH_PIXELS, DEF_WINDOW_HEIGHT_PIXELS, TRUE);
 }
