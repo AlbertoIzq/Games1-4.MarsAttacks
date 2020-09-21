@@ -1,5 +1,6 @@
 #pragma once
-#include "Games1-4.MarsAttacks.h" // Needed for Position
+
+#include "Games1-4.MarsAttacks.h" // Needed for Position and Size
 
 /*struct Player {
 	Position position;
@@ -13,10 +14,14 @@
 class Player
 {
 private:
+	static const Position DEF_INITIAL_POSITION; // Initialized in .cpp
+	static const Size DEF_SPRITE; // Initialized in .cpp
+	static const int DEF_SPRITE_WIDTH{ 5 };
+	static const int DEF_SPRITE_HEIGTH{ 2 };
 	static constexpr int DEF_MAX_NUM_LIVES{ 3 };
-	static const Position DEF_INITIAL_POSITION;
 protected:
 	Position position;
+	Size spriteSize;
 	int lives;
 public:
 	Player();

@@ -1,8 +1,10 @@
 #include "Game.h"
 #include "Games1-4.MarsAttacks.h" // Needed for "windows.h" and setConsoleWindowSize()
 
+const Size Game::DEF_WINDOW{ DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGTH };
+
 Game::Game()
-    : currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL } {
+    : windowSize{ DEF_WINDOW }, currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL } {
     setConsoleWindowSize();
 }
 
@@ -13,5 +15,5 @@ void Game::setConsoleWindowSize() {
     //int width{ r.right - r.left };  
     //int height{ r.bottom - r.top};
     // MoveWindow(window_handle, x, y, width, height, redraw_window);
-    MoveWindow(console, r.left, r.top, 607, 550, TRUE); // Values get by setting console size manually when running the program to have 80 rows and 32 cols
+    MoveWindow(console, r.left, r.top, DEF_WINDOW_WIDTH_PIXELS, DEF_WINDOW_HEIGTH_PIXELS, TRUE);
 }
