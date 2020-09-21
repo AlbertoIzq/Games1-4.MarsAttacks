@@ -142,12 +142,10 @@ vector of scores
 
 #pragma once
 
-#include "curses.h"
 #include "StaticLib-Utils.h"
 
-// define must be typed before windows.h; curses.h must be typed before both
-#define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
-#include <windows.h> // Used in Game.cpp in setConsoleWindowSize()
+#include "Game.h"
+#include "Player.h"
 
 #include <iostream>
 #include <string>
@@ -158,15 +156,11 @@ using std::cout;
 using std::endl;
 using std::string;
 
-struct Position {
-	int x;
-	int y;
-};
+char handleInput(const Game& game, Player& player);
+void updateGame(const Game& game, Player& player);
+void drawGame(const Game& game, Player& player);
 
-struct Size {
-	int width;
-	int height;
-};
+
 
 /// <summary>
 /// ////////////////////////////////////////////////////

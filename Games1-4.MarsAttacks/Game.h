@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Games1-4.MarsAttacks.h" // Needed for Position and Size
+#include "Other.h" // // Needed for Position and Size, for "windows.h" and setConsoleWindowSize()
+
+// Needed for Position and Size
 
 enum class Game_State
 {

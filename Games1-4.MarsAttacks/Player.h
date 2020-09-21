@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Game.h"
-#include "Games1-4.MarsAttacks.h" // Needed for Position and Size
+#include "Other.h" // Needed for Position and Size
 
 /*struct Player {
 	Position position;
@@ -11,6 +11,17 @@
 	int lives; // max 3
 	int score;
 };*/
+
+/*
+CONSTANTS
+
+NOT_IN_PLAY = 1;
+
+void resetMissile(Player& player) {
+	player.missile.x = NOT_IN_PLAY;
+	player.missile.y = NOT_IN_PLAY;
+}
+*/
 
 class Player
 {
@@ -28,7 +39,7 @@ protected:
 	Size spriteSize;
 	int lives;
 
-	void resetPosition() { position = DEF_INI_POSITION; }
+	void resetPosition();
 public:
 	Player();
 };

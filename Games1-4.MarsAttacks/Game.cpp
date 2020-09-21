@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Games1-4.MarsAttacks.h" // Needed for "windows.h" and setConsoleWindowSize()
 
 const Size Game::DEF_WINDOW{ DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT };
 
