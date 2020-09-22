@@ -5,10 +5,10 @@
 #include <string>
 
 enum ArrowKeys {
-	UP = KEY_UP,
-	DOWN = KEY_DOWN,
-	LEFT = KEY_LEFT,
-	RIGHT = KEY_RIGHT
+	AK_UP = KEY_UP,
+	AK_DOWN = KEY_DOWN,
+	AK_LEFT = KEY_LEFT,
+	AK_RIGHT = KEY_RIGHT
 };
 
 void initializeCurses(bool no_delay);

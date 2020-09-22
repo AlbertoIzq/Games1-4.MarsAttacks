@@ -16,10 +16,16 @@ int main(void)
 
     do {
         input = handleInput(game, player);
-        updateGame(game, player);
-        clearScreen(); // PDCurses
-        drawGame(game, player);
-        refreshScreen(); // PDCurses
+        if (input != 'q') {
+            updateGame(game, player);
+            clearScreen(); // PDCurses
+            drawGame(game, player);
+            refreshScreen(); // PDCurses
+        }
+        else {  
+            quit = true;
+        }
+        
     } while (!quit);
 
     shutdownCurses(); // PDCurses
@@ -27,8 +33,23 @@ int main(void)
     return 0;
 }
 
-char handleInput(const Game& game, Player& player) {
-    return ' ';
+int handleInput(const Game& game, Player& player) {
+    int input = getChar();
+    switch (input)
+    {
+    case 'q':
+        return input;
+    case AK_LEFT:
+        player.movePlayer(game, false);
+        break;
+    case AK_RIGHT:
+        player.movePlayer(game, true);
+        break;
+    default:
+        break;
+    }
+    
+    return 1;
 }
 
 void updateGame(const Game& game, Player& player) {

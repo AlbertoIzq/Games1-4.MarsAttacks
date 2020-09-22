@@ -38,6 +38,8 @@ protected:
 	static constexpr int DEF_SPRITE_HEIGHT{ 2 };
 	static const std::array<std::string, DEF_SPRITE_HEIGHT> PLAYER_SPRITE; // Initialized in .cpp
 	static constexpr int DEF_MAX_NUM_LIVES{ 3 };
+
+	static constexpr int DEF_SPEED{ 2 };
 protected:
 	Position position;
 	Size spriteSize;
@@ -55,5 +57,7 @@ public:
 	int getLives() const { return lives; }
 
 	// SET METHODS
+	void movePlayer(const Game& game, const bool &direction_right);
+
 };
 

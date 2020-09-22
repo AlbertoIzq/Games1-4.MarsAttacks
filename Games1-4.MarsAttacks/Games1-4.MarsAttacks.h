@@ -156,7 +156,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-char handleInput(const Game& game, Player& player);
+int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
 void updateGame(const Game& game, Player& player);
 void drawGame(const Game& game, const Player& player);
 
