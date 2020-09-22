@@ -18,11 +18,11 @@ class Game
 {
 	friend class Player; // To give access to DEF_WINDOW
 private:
-	static const Size DEF_WINDOW; // Initialized in .cpp
-	static const int DEF_WINDOW_WIDTH{ 32 };
-	static const int DEF_WINDOW_HEIGHT{ 80 };
-	static const int DEF_WINDOW_WIDTH_PIXELS{ 607 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size
-	static const int DEF_WINDOW_HEIGHT_PIXELS{ 550 };
+	static const Size DEF_WINDOW_SIZE; // Initialized in .cpp
+	static const int DEF_WINDOW_WIDTH{ 64 };
+	static const int DEF_WINDOW_HEIGHT{ 50 };
+	static const int DEF_WINDOW_WIDTH_PIXELS{ 424 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size and 
+	static const int DEF_WINDOW_HEIGHT_PIXELS{ 758 };
 	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_PLAY }; // for now - TODO: Change to GS_INTRO
 	static constexpr int DEF_LEVEL{1};
 protected:
@@ -32,6 +32,6 @@ protected:
 public:
 	Game();
 
-	void setConsoleWindowSize(); // Sets window size to 80 rows and 32 cols
+	void setConsoleWindowSize(); // Sets window size to default values
 };
 

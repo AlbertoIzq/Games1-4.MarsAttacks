@@ -9,7 +9,7 @@ int main(void)
     Game game;
     Player player;
     
-    InitializeCurses(true); // PDCurses
+    initializeCurses(true); // PDCurses
 
     bool quit = false;
     char input;
@@ -17,24 +17,24 @@ int main(void)
     do {
         input = handleInput(game, player);
         updateGame(game, player);
-        ClearScreen(); // PDCurses
+        clearScreen(); // PDCurses
         drawGame(game, player);
-        RefreshScreen(); // PDCurses
+        refreshScreen(); // PDCurses
     } while (!quit);
 
-    ShutdownCurses(); // PDCurses
+    shutdownCurses(); // PDCurses
 
     return 0;
 }
 
 char handleInput(const Game& game, Player& player) {
-    return 'c';
+    return ' ';
 }
 
 void updateGame(const Game& game, Player& player) {
 
 }
 
-void drawGame(const Game& game, Player& player) {
-
+void drawGame(const Game& game, const Player& player) {
+    drawSprite(player.getPosition().x, player.getPosition().y, player.getSprite(), player.getSpriteSize().height);
 }

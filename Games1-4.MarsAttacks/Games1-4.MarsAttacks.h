@@ -158,9 +158,7 @@ using std::string;
 
 char handleInput(const Game& game, Player& player);
 void updateGame(const Game& game, Player& player);
-void drawGame(const Game& game, Player& player);
-
-
+void drawGame(const Game& game, const Player& player);
 
 /// <summary>
 /// ////////////////////////////////////////////////////

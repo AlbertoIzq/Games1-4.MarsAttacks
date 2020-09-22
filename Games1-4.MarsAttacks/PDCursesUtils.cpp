@@ -2,7 +2,7 @@
 
 // Wrappers to hide implementation details
 
-void InitializeCurses(bool no_delay) {
+void initializeCurses(bool no_delay) {
 	initscr();
 	curs_set(false);
 	noecho(); // characters typed in are not displayed
@@ -10,34 +10,34 @@ void InitializeCurses(bool no_delay) {
 	keypad(stdscr, true); // enables the arrow keys
 }
 
-void ShutdownCurses() {
+void shutdownCurses() {
 	endwin();
 }
 
-void ClearScreen() {
+void clearScreen() {
 	clear();
 }
 
-void RefreshScreen() {
+void refreshScreen() {
 	refresh();
 }
 
-int ScreenWidth() {
+int screenWidth() {
 	return COLS;
 }
 
-int ScreenHeight() {
+int screenHeight() {
 	return LINES;
 }
 
-int GetChar() {
+int getChar() {
 	return getch();
 }
 
-void DrawCharacter(int x_pos, int y_pos, char a_character) {
+void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character) {
 	mvaddch(y_pos, x_pos, a_character);
 }
 
-void MoveCursor(int x_pos, int y_pos) {
+void moveCursor(const int& x_pos, const int& y_pos) {
 	move(y_pos, x_pos);
 }
