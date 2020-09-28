@@ -146,6 +146,7 @@
     <ClCompile Include="Missile.cpp" />
     <ClCompile Include="PDCursesUtils.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Shield.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Other.h" />
     <ClInclude Include="PDCursesUtils.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Shield.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

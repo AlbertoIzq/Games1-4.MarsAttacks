@@ -2,17 +2,17 @@
 
 #include "Other.h"
 #include <ctime> // To control Frames Per Second (FPS)
+#include <cmath> // For computing shields padding
+#include <array>
 
 #include <iostream>
-
-enum {
-    FPS = 20,
-};
 
 int main(void)
 {
     Game game;
     Player player;
+    std::array<Shield, DEF_NUM_SHIELDS> shields;
+    iniShields(game, player, shields);
     
     initializeCurses(true); // PDCurses
 
@@ -27,12 +27,12 @@ int main(void)
             clock_t current_time = clock();
             clock_t dt = current_time - last_time;
 
-            if (dt > CLOCKS_PER_SEC / FPS) {
+            if (dt > CLOCKS_PER_SEC / DEF_FPS) {
                 last_time = current_time;
 
                 updateGame(game, player);
                 clearScreen(); // PDCurses
-                drawGame(game, player);
+                drawGame(game, player, shields);
                 refreshScreen(); // PDCurses
             }            
         }
@@ -72,7 +72,32 @@ void updateGame(const Game& game, Player& player) {
     player.moveMissile();
 }
 
-void drawGame(const Game& game, Player& player) {
+void drawGame(const Game& game, const Player& player, const std::array<Shield, DEF_NUM_SHIELDS>& shields) {
     player.draw();
     player.getMissile().draw();
+    drawShields(shields);
+}
+
+void drawShields(const std::array<Shield, DEF_NUM_SHIELDS>& shields) {
+    for (Shield s : shields) {
+        s.draw();
+    }
+}
+
+void iniShields(const Game& game, const Player& player, std::array<Shield, DEF_NUM_SHIELDS>& shields) {
+
+    int game_width{ game.getSize().width };
+    int game_height{ game.getSize().height };
+    int player_sprite_height{ player.getSpriteSize().height };
+    int shield_sprite_width{ shields.at(0).getSpriteSize().width };
+    int shield_sprite_height{ shields.at(0).getSpriteSize().height };
+    
+
+    int first_padding = ceil(static_cast<float>(game_width - DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(DEF_NUM_SHIELDS + 1));
+    int x_padding = floor(static_cast<float>(game_width - DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(DEF_NUM_SHIELDS + 1));
+
+    for (size_t i{ 0 }; i < shields.size(); i++)
+    {
+        shields.at(i).setPosition(first_padding + i * (shield_sprite_width + x_padding), game_height - 1 - player_sprite_height - shield_sprite_height - DEF_INI_POSITION_SHIELD_Y_OFFSET_DOWN);
+    }
 }

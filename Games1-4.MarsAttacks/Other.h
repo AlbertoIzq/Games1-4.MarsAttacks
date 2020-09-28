@@ -1,6 +1,6 @@
 #pragma once
 
-// Class to contain other data structures and to add external libraries includes related with PDCurses
+// Class to add external libraries includes related with PDCurses and to contain other data structures
 
 // define must be typed before windows.h
 #define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
@@ -10,6 +10,12 @@
 #include "curses.h"
 
 #include "PDCursesUtils.h"
+
+enum {
+	DEF_FPS = 20,
+	DEF_NUM_SHIELDS = 4,
+	DEF_INI_POSITION_SHIELD_Y_OFFSET_DOWN = 2,
+};
 
 struct Position {
 	int x;

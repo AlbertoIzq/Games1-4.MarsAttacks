@@ -146,6 +146,7 @@ vector of scores
 
 #include "Game.h"
 #include "Player.h"
+#include "Shield.h"
 
 #include <iostream>
 #include <string>
@@ -158,14 +159,16 @@ using std::string;
 
 int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
 void updateGame(const Game& game, Player& player);
-void drawGame(const Game& game, Player& player);
+void drawGame(const Game& game, const Player& player, const std::array<Shield, DEF_NUM_SHIELDS>& shields);
+void drawShields(const std::array<Shield, DEF_NUM_SHIELDS>& shields);
+void iniShields(const Game& game, const Player& player, std::array<Shield, DEF_NUM_SHIELDS>& shields);
 
 /// <summary>
 /// ////////////////////////////////////////////////////
 /// </summary>
 
 enum {
-	SHIELD_SPRITE_HEIGTH = 3,
+	//SHIELD_SPRITE_HEIGTH = 3,
 	NUM_ALIEN_ROWS = 5,
 	NUM_ALIEN_COLS = 11,
 	MAX_NUM_ALIEN_BOMBS = 3,
@@ -175,11 +178,6 @@ enum class AlienState {
 	ALIVE = 0,
 	DEAD,
 	EXPLODING
-};
-
-struct Shield {
-	Position position;
-	char* sprite[SHIELD_SPRITE_HEIGTH];
 };
 
 struct AlienBomb

@@ -32,6 +32,8 @@ protected:
 public:
 	Game();
 
+	Size getSize() const { return windowSize; }
+
 	void setConsoleWindowSize(); // Sets window size to default values
 };
 
