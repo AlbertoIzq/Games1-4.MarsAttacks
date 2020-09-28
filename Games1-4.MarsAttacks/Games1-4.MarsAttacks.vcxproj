@@ -143,12 +143,14 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Games1-4.MarsAttacks.cpp" />
+    <ClCompile Include="Missile.cpp" />
     <ClCompile Include="PDCursesUtils.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Games1-4.MarsAttacks.h" />
+    <ClInclude Include="Missile.h" />
     <ClInclude Include="Other.h" />
     <ClInclude Include="PDCursesUtils.h" />
     <ClInclude Include="Player.h" />

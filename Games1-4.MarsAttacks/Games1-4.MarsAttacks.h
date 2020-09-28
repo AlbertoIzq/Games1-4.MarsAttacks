@@ -158,7 +158,7 @@ using std::string;
 
 int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
 void updateGame(const Game& game, Player& player);
-void drawGame(const Game& game, const Player& player);
+void drawGame(const Game& game, Player& player);
 
 /// <summary>
 /// ////////////////////////////////////////////////////

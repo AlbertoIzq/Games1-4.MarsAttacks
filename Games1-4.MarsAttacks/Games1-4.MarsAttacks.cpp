@@ -1,8 +1,13 @@
 #include "Games1-4.MarsAttacks.h"
 
-#include "PDCursesUtils.h"
+#include "Other.h"
+#include <ctime> // To control Frames Per Second (FPS)
 
 #include <iostream>
+
+enum {
+    FPS = 20,
+};
 
 int main(void)
 {
@@ -14,13 +19,22 @@ int main(void)
     bool quit = false;
     char input;
 
+    clock_t last_time = clock();
+
     do {
         input = handleInput(game, player);
         if (input != 'q') {
-            updateGame(game, player);
-            clearScreen(); // PDCurses
-            drawGame(game, player);
-            refreshScreen(); // PDCurses
+            clock_t current_time = clock();
+            clock_t dt = current_time - last_time;
+
+            if (dt > CLOCKS_PER_SEC / FPS) {
+                last_time = current_time;
+
+                updateGame(game, player);
+                clearScreen(); // PDCurses
+                drawGame(game, player);
+                refreshScreen(); // PDCurses
+            }            
         }
         else {  
             quit = true;
@@ -40,22 +54,25 @@ int handleInput(const Game& game, Player& player) {
     case 'q':
         return input;
     case AK_LEFT:
-        player.movePlayer(game, false);
+        player.move(game, false);
         break;
     case AK_RIGHT:
-        player.movePlayer(game, true);
+        player.move(game, true);
+        break;
+    case ' ':
+        player.shootMissile();
         break;
     default:
         break;
     }
-    
-    return 1;
+    return input;
 }
 
 void updateGame(const Game& game, Player& player) {
-
+    player.moveMissile();
 }
 
-void drawGame(const Game& game, const Player& player) {
-    drawSprite(player.getPosition().x, player.getPosition().y, player.getSprite(), player.getSpriteSize().height);
+void drawGame(const Game& game, Player& player) {
+    player.draw();
+    player.getMissile().draw();
 }

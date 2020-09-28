@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Other.h" // Needed for Position, Size and PDCursesUtils
+
 #include "Game.h"
-#include "Other.h" // Needed for Position and Size
+#include "Missile.h"
 
 #include <string>
 #include <array>
@@ -38,14 +40,16 @@ protected:
 	static constexpr int DEF_SPRITE_HEIGHT{ 2 };
 	static const std::array<std::string, DEF_SPRITE_HEIGHT> PLAYER_SPRITE; // Initialized in .cpp
 	static constexpr int DEF_MAX_NUM_LIVES{ 3 };
+	static constexpr int DEF_SPEED_PLAYER{ 2 };
+	static constexpr int DEF_SPEED_MISSILE{ 1 };
 
-	static constexpr int DEF_SPEED{ 2 };
 protected:
 	Position position;
 	Size spriteSize;
 	std::array<std::string, DEF_SPRITE_HEIGHT> sprite;
+	Missile missile;
 	int lives;
-
+	
 	void resetPosition();
 public:
 	Player();
@@ -54,10 +58,15 @@ public:
 	Position getPosition() const { return position; }
 	Size getSpriteSize() const { return spriteSize; }
 	std::array<std::string, DEF_SPRITE_HEIGHT> getSprite() const { return sprite; }
+	Missile getMissile() { return missile; }
 	int getLives() const { return lives; }
 
 	// SET METHODS
-	void movePlayer(const Game& game, const bool &direction_right);
 
+	void draw() const;
+	void move(const Game& game, const bool &direction_right);
+
+	void shootMissile();
+	void moveMissile();
 };
 

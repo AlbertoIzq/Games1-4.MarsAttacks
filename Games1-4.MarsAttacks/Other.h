@@ -1,6 +1,6 @@
 #pragma once
 
-// Class to contain other data structures and to add external libraries includes
+// Class to contain other data structures and to add external libraries includes related with PDCurses
 
 // define must be typed before windows.h
 #define _WIN32_WINNT 0x0500 // Used to resize console window. It says that you are running this program on Windows 2000 or higher.
@@ -8,6 +8,8 @@
 
 #undef MOUSE_MOVED // To avoid macro redefinition error in curses.h because MOUSE_MOVED is also defined in windows.h
 #include "curses.h"
+
+#include "PDCursesUtils.h"
 
 struct Position {
 	int x;

@@ -8,7 +8,7 @@ const Size Player::DEF_SPRITE_SIZE{ DEF_SPRITE_WIDTH, DEF_SPRITE_HEIGHT };
 const std::array<std::string, Player::DEF_SPRITE_HEIGHT> Player::PLAYER_SPRITE{ " =A= ", "=====" };
 
 Player::Player()
-	: position{ DEF_INI_POSITION }, spriteSize{ DEF_SPRITE_SIZE }, sprite{ PLAYER_SPRITE }, lives{ DEF_MAX_NUM_LIVES } {
+	: position{ DEF_INI_POSITION }, spriteSize{ DEF_SPRITE_SIZE }, sprite{ PLAYER_SPRITE }, missile{ Missile() }, lives{ DEF_MAX_NUM_LIVES } {
 }
 
 void Player::resetPosition() {
@@ -18,13 +18,17 @@ void Player::resetPosition() {
 	//resetMissile
 }
 
-void Player::movePlayer(const Game& game, const bool& direction_right) {
+void Player::draw() const {
+	drawSprite(position.x, position.y, sprite, spriteSize.height);
+}
+
+void Player::move(const Game& game, const bool& direction_right) {
 	int dx{ 0 };
 	if (direction_right) {
-		dx = DEF_SPEED;
+		dx = DEF_SPEED_PLAYER;
 	}
 	else {
-		dx = -DEF_SPEED;
+		dx = -DEF_SPEED_PLAYER;
 	}
 	
 	if (position.x + spriteSize.width + dx > game.windowSize.width) // Make sure the player doesn't go off the screen to the right
@@ -37,5 +41,22 @@ void Player::movePlayer(const Game& game, const bool& direction_right) {
 	}
 	else {
 		position.x += dx;
+	}
+}
+
+void Player::shootMissile() {
+	if (missile.getPosition().y == missile.POSITION_NOT_IN_PLAY || missile.getPosition().x == missile.POSITION_NOT_IN_PLAY)
+	{
+		missile.setPosition(getPosition().x + getSpriteSize().width / 2, getPosition().y - 1); // In the middle of the player, one row above
+	}
+}
+
+void Player::moveMissile() {
+	if(missile.getPosition().y != missile.POSITION_NOT_IN_PLAY)
+	{
+		missile.setPosition(missile.getPosition().x, missile.getPosition().y - DEF_SPEED_MISSILE);
+		if (missile.getPosition().y < 0) {
+			missile.setPosition(missile.POSITION_NOT_IN_PLAY, missile.POSITION_NOT_IN_PLAY);
+		}
 	}
 }
