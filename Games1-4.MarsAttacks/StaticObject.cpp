@@ -1,7 +1,7 @@
 #include "StaticObject.h"
 
-StaticObject::StaticObject(Position positionVal, Size sizeVal, std::vector<std::string> spriteVal)
-	: position{ positionVal }, spriteSize{ sizeVal }, sprite{ spriteVal } {
+StaticObject::StaticObject(Position position_val, Size size_val, std::vector<std::string> sprite_val)
+	: position{ position_val }, spriteSize{ size_val }, sprite{ sprite_val } {
 }
 
 void StaticObject::draw() const {

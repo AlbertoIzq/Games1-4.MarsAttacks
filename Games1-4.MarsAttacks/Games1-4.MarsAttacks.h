@@ -158,10 +158,13 @@ using std::endl;
 using std::string;
 
 int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
-void updateGame(const Game& game, Player& player);
-void drawGame(const Game& game, const Player& player, const std::array<Shield, DEF_NUM_SHIELDS>& shields);
-void drawShields(const std::array<Shield, DEF_NUM_SHIELDS>& shields);
-void iniShields(const Game& game, const Player& player, std::array<Shield, DEF_NUM_SHIELDS>& shields);
+void updateGame(const Game& game, Player& player, std::vector<Shield>& shields);
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields);
+std::vector<Shield> iniShields(const Game& game, const Player& player);
+void drawShields(const std::vector<Shield>& shields);
+void checkResolveShieldCollision(Player& player, std::vector<Shield>& shields);
+bool isShieldCollision(const Position& projectile, const Shield& shield, Position& collision_position); // Return true if collision and shield collision point
+void resolveShieldCollision(Shield& shield, const Position& shield_collision_point);
 
 /// <summary>
 /// ////////////////////////////////////////////////////

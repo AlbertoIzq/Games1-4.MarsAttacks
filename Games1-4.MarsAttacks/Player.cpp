@@ -8,7 +8,7 @@ const Size Player::DEF_SPRITE_SIZE{ DEF_SPRITE_WIDTH, DEF_SPRITE_HEIGHT };
 const std::vector<std::string> Player::DEF_SPRITE{ " =A= ", "=====" };
 
 Player::Player()
-	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES } {
+	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES }, isShootingMissile{ false } {
 }
 
 void Player::resetPosition() {
@@ -41,25 +41,28 @@ void Player::move(const Game& game, const bool& direction_right) {
 }
 
 void Player::shootMissile() {
-	if (missile.getPosition().y == POSITION_NOT_IN_PLAY || missile.getPosition().x == POSITION_NOT_IN_PLAY)
+	if (missile.getPosition().y == DEF_NOT_IN_PLAY || missile.getPosition().x == DEF_NOT_IN_PLAY)
 	{
+		isShootingMissile = true;
 		missile.setPosition(getPosition().x + getSpriteSize().width / 2, getPosition().y - 1); // In the middle of the player, one row above
 	}
 }
 
 void Player::moveMissile() {
-	if (missile.getPosition().y != POSITION_NOT_IN_PLAY)
+	if (missile.getPosition().y != DEF_NOT_IN_PLAY)
 	{
-		missile.setPosition(missile.getPosition().x, missile.getPosition().y - DEF_SPEED_MISSILE);
+		if (!isShootingMissile) {
+			missile.setPosition(missile.getPosition().x, missile.getPosition().y - DEF_SPEED_MISSILE);
+		}
+		else {
+			isShootingMissile = false;
+		}
 		if (missile.getPosition().y < 0) {
-			missile.setPosition(POSITION_NOT_IN_PLAY, POSITION_NOT_IN_PLAY);
+			resetMissile();
 		}
 	}
 }
 
-/*
-void resetMissile(Player& player) {
-	player.missile.x = NOT_IN_PLAY;
-	player.missile.y = NOT_IN_PLAY;
+void Player::resetMissile() {
+	missile.setPosition(DEF_NOT_IN_PLAY, DEF_NOT_IN_PLAY);
 }
-*/

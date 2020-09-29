@@ -15,14 +15,16 @@ private:
 	static constexpr int DEF_SPRITE_WIDTH{ 5 };
 	static constexpr int DEF_SPRITE_HEIGHT{ 2 };
 	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
-	static constexpr int DEF_SPEED{ 2 };
+	static constexpr int DEF_SPEED{ 1 };
 	static constexpr int DEF_MAX_NUM_LIVES{ 3 };
-	static constexpr int DEF_SPEED_MISSILE{ 2 };
+	static constexpr int DEF_SPEED_MISSILE{ 1 };
 protected:
 	Missile missile;
 	int lives;
 	//int score;
 	//int animation
+
+	bool isShootingMissile;
 
 	void resetPosition();
 public:
@@ -34,9 +36,11 @@ public:
 	inline int getLives() const { return lives; }
 
 	// SET METHODS
+
 	void move(const Game& game, const bool& direction_right);
 	void shootMissile();
 	void moveMissile();
+	void resetMissile();
 };
 
 

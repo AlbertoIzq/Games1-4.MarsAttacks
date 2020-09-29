@@ -11,7 +11,7 @@ protected:
 	Size spriteSize;
 	std::vector<std::string> sprite;
 public:
-	StaticObject(Position positionVal, Size sizeVal, std::vector<std::string> spriteVal);
+	StaticObject(Position position_val, Size size_val, std::vector<std::string> sprite_val);
 	virtual ~StaticObject() = default;
 
 	virtual void draw() const;

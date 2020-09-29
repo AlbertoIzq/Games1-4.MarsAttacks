@@ -12,9 +12,9 @@
 #include "PDCursesUtils.h"
 
 enum {
-	DEF_FPS = 20,
+	DEF_FPS = 30,
 	DEF_NUM_SHIELDS = 4,
-	POSITION_NOT_IN_PLAY = -10,
+	DEF_NOT_IN_PLAY = -10,
 	DEF_INI_POSITION_SHIELD_Y_OFFSET_DOWN = 2,
 };
 
