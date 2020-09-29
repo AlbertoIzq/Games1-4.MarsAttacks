@@ -1,32 +1,22 @@
 #pragma once
 
-#include "Other.h" // Needed for Position, Size and PDCursesUtils
+#include "MovingObject.h"
 
-#include <array>
-#include <string>
-
-class Missile
+class Missile : public MovingObject
 {
-public:
-	static constexpr int POSITION_NOT_IN_PLAY{ -1 };
 private:
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
-	static const int DEF_INI_POSITION_X{ POSITION_NOT_IN_PLAY };
-	static const int DEF_INI_POSITION_Y{ POSITION_NOT_IN_PLAY };
-	static constexpr char MISSILE_SPRITE{ '|' };
-	static constexpr int DEF_SPEED{ 1 };
+	static constexpr int DEF_INI_POSITION_X{ POSITION_NOT_IN_PLAY };
+	static constexpr int DEF_INI_POSITION_Y{ POSITION_NOT_IN_PLAY };
+	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
+	static constexpr int DEF_SPRITE_WIDTH{ 1 };
+	static constexpr int DEF_SPRITE_HEIGHT{ 1 };
+	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
+	static constexpr int DEF_SPEED{ 2 };
 protected:
-	Position position;
-	char sprite;
 public:
 	Missile();
-	
-	// GET METHODS
-	Position getPosition() const { return position; }
-	char getSprite() const { return sprite; }
+	virtual ~Missile() = default;
 
-	// SET METHODS
-	void setPosition(const int& x_pos, const int& y_pos) { position.x = x_pos; position.y = y_pos; }
-
-	void draw() const;
+	virtual void draw() const override;
 };

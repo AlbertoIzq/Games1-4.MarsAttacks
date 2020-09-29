@@ -24,7 +24,7 @@ private:
 	static const int DEF_WINDOW_WIDTH_PIXELS{ 424 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size and 
 	static const int DEF_WINDOW_HEIGHT_PIXELS{ 758 };
 	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_PLAY }; // for now - TODO: Change to GS_INTRO
-	static constexpr int DEF_LEVEL{1};
+	static constexpr int DEF_LEVEL{ 1 };
 protected:
 	Size windowSize;
 	Game_State currentState;
@@ -36,4 +36,3 @@ public:
 
 	void setConsoleWindowSize(); // Sets window size to default values
 };
-

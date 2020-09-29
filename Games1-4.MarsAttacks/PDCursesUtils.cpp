@@ -41,3 +41,10 @@ void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character) 
 void moveCursor(const int& x_pos, const int& y_pos) {
 	move(y_pos, x_pos);
 }
+
+void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite, const int& sprite_height, const int& offset) {
+	for (int h = 0; h < sprite_height; h++)
+	{
+		mvprintw(y_pos + h, x_pos, "%s", sprite.at(h).c_str());
+	}
+}

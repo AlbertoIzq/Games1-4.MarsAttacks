@@ -1,71 +1,43 @@
 #pragma once
 
-#include "Other.h" // Needed for Position, Size and PDCursesUtils
-#include "Game.h"
+#include "MovingObject.h"
+
 #include "Missile.h"
+#include "Game.h"
 
-#include <string>
-#include <array>
-
-/*struct Player {
-	Position position;
-	Position missile;
-	Size spriteSize;
-	int animation;
-	int lives; // max 3
-	int score;
-};*/
-
-/*
-CONSTANTS
-
-NOT_IN_PLAY = 1;
-
-void resetMissile(Player& player) {
-	player.missile.x = NOT_IN_PLAY;
-	player.missile.y = NOT_IN_PLAY;
-}
-*/
-
-class Player
+class Player : public MovingObject
 {
 private:
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
-	static const int DEF_INI_POSITION_X; // Initialized in .cpp
-	static const int DEF_INI_POSITION_Y; // Initialized in .cpp
-	static constexpr int DEF_INI_POSITION_Y_OFFSET_DOWN{ 1 };
+	static const int DEF_INI_POSITION_X;
+	static const int DEF_INI_POSITION_Y;
 	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
 	static constexpr int DEF_SPRITE_WIDTH{ 5 };
 	static constexpr int DEF_SPRITE_HEIGHT{ 2 };
-	static const std::array<std::string, DEF_SPRITE_HEIGHT> PLAYER_SPRITE; // Initialized in .cpp
+	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
+	static constexpr int DEF_SPEED{ 2 };
 	static constexpr int DEF_MAX_NUM_LIVES{ 3 };
-	static constexpr int DEF_SPEED_PLAYER{ 2 };
-	static constexpr int DEF_SPEED_MISSILE{ 3 };
-
+	static constexpr int DEF_SPEED_MISSILE{ 2 };
 protected:
-	Position position;
-	Size spriteSize;
-	std::array<std::string, DEF_SPRITE_HEIGHT> sprite;
 	Missile missile;
 	int lives;
-	
+	//int score;
+	//int animation
+
 	void resetPosition();
 public:
 	Player();
+	virtual ~Player() = default;
 
 	// GET METHODS
-	Position getPosition() const { return position; }
-	Size getSpriteSize() const { return spriteSize; }
-	std::array<std::string, DEF_SPRITE_HEIGHT> getSprite() const { return sprite; }
-	Missile getMissile() const { return missile; }
-	int getLives() const { return lives; }
+	inline Missile getMissile() const { return missile; }
+	inline int getLives() const { return lives; }
 
 	// SET METHODS
-
-	void draw() const;
-	void move(const Game& game, const bool &direction_right);
-
+	void move(const Game& game, const bool& direction_right);
 	void shootMissile();
 	void moveMissile();
 };
+
+
 

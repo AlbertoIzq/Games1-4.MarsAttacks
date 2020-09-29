@@ -3,6 +3,7 @@
 #include <curses.h>
 
 #include <string>
+#include <vector>
 
 enum ArrowKeys {
 	AK_UP = KEY_UP,
@@ -21,11 +22,4 @@ int screenHeight();
 int getChar();
 void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character);
 void moveCursor(const int& x_pos, const int& y_pos);
-
-template<size_t N>
-void drawSprite(const int& x_pos, const int& y_pos, const std::array<std::string, N>& sprite, const int& sprite_height, const int& offset = 0) {
-	for (size_t h = 0; h < sprite_height; h++)
-	{
-		mvprintw(y_pos + h, x_pos, "%s", sprite.at(h).c_str());
-	}
-}
+void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite, const int& sprite_height, const int& offset = 0);

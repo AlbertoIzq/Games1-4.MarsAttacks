@@ -79,7 +79,7 @@ void drawGame(const Game& game, const Player& player, const std::array<Shield, D
 }
 
 void drawShields(const std::array<Shield, DEF_NUM_SHIELDS>& shields) {
-    for (Shield s : shields) {
+    for (auto s : shields) {
         s.draw();
     }
 }

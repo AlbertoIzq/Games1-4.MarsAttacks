@@ -1,16 +1,16 @@
 #include "Missile.h"
 
-#include <iostream>
-
-// Initialization of class structs default values (They cannot be initialized in Player.h)
+// Initialization of class structs default values (They cannot be initialized in .h)
 const Position Missile::DEF_INI_POSITION{ DEF_INI_POSITION_X , DEF_INI_POSITION_Y };
+const Size Missile::DEF_SPRITE_SIZE{ DEF_SPRITE_WIDTH, DEF_SPRITE_HEIGHT };
+const std::vector<std::string> Missile::DEF_SPRITE{ "|" };
 
 Missile::Missile()
-	: position{ DEF_INI_POSITION }, sprite{ MISSILE_SPRITE } {
+	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED } {
 }
 
 void Missile::draw() const {
 	if (position.x != POSITION_NOT_IN_PLAY) {
-		drawCharacter(position.x, position.y, sprite);
+		drawSprite(position.x, position.y, sprite, spriteSize.height);
 	}
 }
