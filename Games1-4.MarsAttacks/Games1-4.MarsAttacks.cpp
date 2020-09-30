@@ -81,15 +81,15 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
 }
 
 void drawShields(const std::vector<Shield>& shields) {
-    for (auto s : shields) {
+    for (const auto& s : shields) {
         s.draw();
     }
 }
 
 void drawAlienSwarm(const AlienSwarm& aliens) {
     std::vector<std::vector<Alien>>::iterator it;
-    for (auto alien_row : aliens.getAliens()) {
-        for (auto alien : alien_row) {
+    for (const auto& alien_row : aliens.getAliens()) {
+        for (const auto& alien : alien_row) {
             alien.draw();
         }
     }

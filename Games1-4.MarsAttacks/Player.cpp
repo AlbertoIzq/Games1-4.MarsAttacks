@@ -8,7 +8,7 @@ const Size Player::DEF_SPRITE_SIZE{ DEF_SPRITE_WIDTH, DEF_SPRITE_HEIGHT };
 const std::vector<std::string> Player::DEF_SPRITE{ " =A= ", "=====" };
 
 Player::Player()
-	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES }, isShootingMissile{ false } {
+	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES }, score{ DEF_INI_SCORE }, isShootingMissile{ false } {
 }
 
 void Player::resetPosition() {
