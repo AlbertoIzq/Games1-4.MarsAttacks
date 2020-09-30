@@ -125,7 +125,7 @@ void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields) 
         for (auto& shield : shields) {
             if (isShieldCollision(player.getMissile().getPosition(), shield, collision_position)) {
                 resolveShieldCollision(shield, collision_position);
-                player.resetMissile();
+                player.setMissile().reset();
                 break;
             }
         }
@@ -161,7 +161,7 @@ void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm) {
                 if (isAlienCollision(player.getMissile().getPosition(), alien)) {
                     resolveAlienCollision(player, alien);
                     alien_swarm.setNumAliensLeft(alien_swarm.getNumAliensLeft() - 1);
-                    player.resetMissile();
+                    player.setMissile().reset();
                     break;
                 }
             }
@@ -185,8 +185,6 @@ void resolveAlienCollision(Player& player, Alien& alien) {
     if (alien.getExplosionTimer() == DEF_NOT_IN_PLAY) {
         alien.setExplosionTimer(Alien::DEF_EXPLOSION_TIME);
     }
-
-
     // Incrementing player's score
     switch (alien.getAlienType()) {
     case Alien_Type::AT_10P:

@@ -14,3 +14,8 @@ void Missile::draw() const {
 		drawSprite(position.x, position.y, sprite, spriteSize.height);
 	}
 }
+
+void Missile::reset() {
+	position.x = DEF_NOT_IN_PLAY;
+	position.y = DEF_NOT_IN_PLAY;
+}

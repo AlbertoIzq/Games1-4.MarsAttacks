@@ -11,13 +11,6 @@ Player::Player()
 	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES }, score{ DEF_INI_SCORE }, isShootingMissile{ false } {
 }
 
-void Player::resetPosition() {
-	position = DEF_INI_POSITION;
-	//animation = 0;
-	//missile =
-	//resetMissile
-}
-
 void Player::move(const Game& game, const bool& direction_right) {
 	int dx{ 0 };
 	if (direction_right) {
@@ -39,6 +32,13 @@ void Player::move(const Game& game, const bool& direction_right) {
 	}
 }
 
+void Player::resetPosition() {
+	position = DEF_INI_POSITION;
+	//animation = 0;
+	//missile =
+	//resetMissile
+}
+
 void Player::shootMissile() {
 	if (missile.getPosition().y == DEF_NOT_IN_PLAY || missile.getPosition().x == DEF_NOT_IN_PLAY)
 	{
@@ -57,11 +57,7 @@ void Player::moveMissile() {
 			isShootingMissile = false;
 		}
 		if (missile.getPosition().y < 0) {
-			resetMissile();
+			missile.reset();
 		}
 	}
-}
-
-void Player::resetMissile() {
-	missile.setPosition(DEF_NOT_IN_PLAY, DEF_NOT_IN_PLAY);
 }

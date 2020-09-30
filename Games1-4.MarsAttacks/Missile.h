@@ -19,4 +19,6 @@ public:
 	virtual ~Missile() = default;
 
 	virtual void draw() const override;
+
+	void reset();
 };

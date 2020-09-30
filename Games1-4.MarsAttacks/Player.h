@@ -26,7 +26,6 @@ protected:
 
 	bool isShootingMissile;
 
-	void resetPosition();
 public:
 	Player();
 	virtual ~Player() = default;
@@ -37,10 +36,13 @@ public:
 	inline int getScore() const { return score; }
 
 	// SET METHODS
+	inline Missile& setMissile() { return missile; }
 	inline void setLives(int lives) { this->lives = lives; };
 	inline void setScore(int score) { this->score = score; };
 
 	void move(const Game& game, const bool& direction_right);
+	void resetPosition();
+
 	void shootMissile();
 	void moveMissile();
 	void resetMissile();

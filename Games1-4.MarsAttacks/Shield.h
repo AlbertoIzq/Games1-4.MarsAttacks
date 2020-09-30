@@ -15,7 +15,4 @@ private:
 public:
 	Shield();
 	virtual ~Shield() = default;
-
-	static Size getDefSpriteSize() { return DEF_SPRITE_SIZE; }
 };
-
