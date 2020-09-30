@@ -6,7 +6,7 @@ const int AlienSwarm::DEF_INI_POSITION_Y = Game::DEF_WINDOW_SIZE.height - DEF_NU
 const Position AlienSwarm::DEF_INI_POSITION{ DEF_INI_POSITION_X , DEF_INI_POSITION_Y };
 
 AlienSwarm::AlienSwarm()//(Game game)
-	: position{DEF_INI_POSITION} {
+	: position{ DEF_INI_POSITION }, numAliensLeft{ 0 } {
 	//position.y += game.level;
 
 	// 1 row - 30 Points aliens
@@ -19,6 +19,7 @@ AlienSwarm::AlienSwarm()//(Game game)
 			alien.setAlienType(Alien_Type::AT_30P);
 			alien.setSprite(Alien::DEF_SPRITE_30P_1);
 			alien_30P.push_back(alien);
+			numAliensLeft++;
 		}
 		aliens.push_back(alien_30P);
 	}
@@ -33,6 +34,7 @@ AlienSwarm::AlienSwarm()//(Game game)
 			alien.setAlienType(Alien_Type::AT_20P);
 			alien.setSprite(Alien::DEF_SPRITE_20P_1);
 			alien_20P.push_back(alien);
+			numAliensLeft++;
 		}
 		aliens.push_back(alien_20P);
 	}
@@ -47,11 +49,8 @@ AlienSwarm::AlienSwarm()//(Game game)
 			alien.setAlienType(Alien_Type::AT_10P);
 			alien.setSprite(Alien::DEF_SPRITE_10P_1);
 			alien_10P.push_back(alien);
+			numAliensLeft++;
 		}
 		aliens.push_back(alien_10P);
 	}
-}
-
-void AlienSwarm::draw() const {
-
 }

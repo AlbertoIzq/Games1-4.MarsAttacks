@@ -12,7 +12,7 @@ int main(void)
     Game game;
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
-    AlienSwarm aliens;
+    AlienSwarm alien_swarm;
     
     initializeCurses(true); // PDCurses
 
@@ -30,9 +30,9 @@ int main(void)
             if (dt > CLOCKS_PER_SEC / DEF_FPS) {
                 last_time = current_time;
 
-                updateGame(game, player, shields);
+                updateGame(game, player, shields, alien_swarm);
                 clearScreen(); // PDCurses
-                drawGame(game, player, shields, aliens);
+                drawGame(game, player, shields, alien_swarm);
                 refreshScreen(); // PDCurses
             }            
         }
@@ -68,9 +68,10 @@ int handleInput(const Game& game, Player& player) {
     return input;
 }
 
-void updateGame(const Game& game, Player& player, std::vector<Shield>& shields) {
+void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
     player.moveMissile();
-    checkResolveShieldCollision(player, shields);
+    checkResolveShieldsCollision(player, shields);
+    checkResolveAlienSwarmCollision(player, alien_swarm);
 }
 
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens) {
@@ -78,21 +79,6 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
     player.getMissile().draw();
     drawShields(shields);
     drawAlienSwarm(aliens);
-}
-
-void drawShields(const std::vector<Shield>& shields) {
-    for (const auto& s : shields) {
-        s.draw();
-    }
-}
-
-void drawAlienSwarm(const AlienSwarm& aliens) {
-    std::vector<std::vector<Alien>>::iterator it;
-    for (const auto& alien_row : aliens.getAliens()) {
-        for (const auto& alien : alien_row) {
-            alien.draw();
-        }
-    }
 }
 
 std::vector<Shield> iniShields(const Game& game, const Player& player) {
@@ -104,7 +90,7 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
     Shield shield_properties;
     int shield_sprite_width{ shield_properties.getSpriteSize().width };
     int shield_sprite_height{ shield_properties.getSpriteSize().height };
-    
+
     int first_padding = ceil(static_cast<float>(game_width - DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(DEF_NUM_SHIELDS + 1));
     int x_padding = floor(static_cast<float>(game_width - DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(DEF_NUM_SHIELDS + 1));
 
@@ -117,7 +103,23 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
     return shields;
 }
 
-void checkResolveShieldCollision(Player& player, std::vector<Shield>& shields) {
+void drawShields(const std::vector<Shield>& shields) {
+    for (const auto& s : shields) {
+        s.draw();
+    }
+}
+
+void drawAlienSwarm(const AlienSwarm& alien_swarm) {
+    std::vector<std::vector<Alien>>::iterator it;
+    for (auto& alien_row : alien_swarm.getAliens()) {
+        for (auto& alien : alien_row) {
+            alien.setSpriteDependingOnState();
+            alien.draw();
+        }
+    }
+}
+
+void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields) {
     if (player.getMissile().getPosition().y != DEF_NOT_IN_PLAY) {
         Position collision_position{ DEF_NOT_IN_PLAY , DEF_NOT_IN_PLAY };
         for (auto& shield : shields) {
@@ -130,17 +132,17 @@ void checkResolveShieldCollision(Player& player, std::vector<Shield>& shields) {
     }
 }
 
-bool isShieldCollision(const Position& projectile, const Shield& shield, Position& collision_position) {
+bool isShieldCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point) {
     bool is_collision{ false };
-    collision_position.x = DEF_NOT_IN_PLAY;
-    collision_position.y = DEF_NOT_IN_PLAY;
+    shield_collision_point.x = DEF_NOT_IN_PLAY;
+    shield_collision_point.y = DEF_NOT_IN_PLAY;
 
     if (projectile.x >= shield.getPosition().x && projectile.x < (shield.getPosition().x + shield.getSpriteSize().width) // Is it in line horizontally?
     && projectile.y >= shield.getPosition().y && projectile.y < (shield.getPosition().y + shield.getSpriteSize().height) // And vertically?
     && shield.getSprite().at(projectile.y - shield.getPosition().y).at(projectile.x - shield.getPosition().x) != ' ') { // Does it collide with a part of the object?
         // There is a collision
-        collision_position.x = projectile.x - shield.getPosition().x;
-        collision_position.y = projectile.y - shield.getPosition().y;
+        shield_collision_point.x = projectile.x - shield.getPosition().x;
+        shield_collision_point.y = projectile.y - shield.getPosition().y;
         is_collision = true;
     }
     return is_collision;
@@ -150,4 +152,34 @@ void resolveShieldCollision(Shield& shield, const Position& shield_collision_poi
     std::vector<std::string> current_sprite = shield.getSprite();
     current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' ';
     shield.setSprite(current_sprite);
+}
+
+void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm) {
+    if (player.getMissile().getPosition().y != DEF_NOT_IN_PLAY) {
+        for (auto& alien_row : alien_swarm.setAliens()) {
+            for (auto& alien : alien_row) {
+                if (isAlienCollision(player.getMissile().getPosition(), alien)) {
+                    resolveAlienCollision(alien);
+                    player.resetMissile();
+                    break;
+                }
+            }
+        }
+    }
+}
+
+bool isAlienCollision(const Position& projectile, const Alien& alien) {
+    bool is_collision{ false };
+
+    if (alien.getAlienState() == Alien_State::AS_ALIVE
+    && projectile.x >= alien.getPosition().x && projectile.x < (alien.getPosition().x + alien.getSpriteSize().width)
+    && projectile.y >= alien.getPosition().y && projectile.y < (alien.getPosition().y + alien.getSpriteSize().height)) {
+        is_collision = true;
+    }
+    return is_collision;
+}
+
+void resolveAlienCollision(Alien& alien) {
+    alien.setAlienState(Alien_State::AS_EXPLODING);
+    // get score for player
 }

@@ -159,14 +159,19 @@ using std::endl;
 using std::string;
 
 int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
-void updateGame(const Game& game, Player& player, std::vector<Shield>& shields);
+void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens);
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 void drawShields(const std::vector<Shield>& shields);
-void checkResolveShieldCollision(Player& player, std::vector<Shield>& shields);
-bool isShieldCollision(const Position& projectile, const Shield& shield, Position& collision_position); // Return true if collision and shield collision point
+void drawAlienSwarm(const AlienSwarm& alien_swarm);
+
+void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields);
+bool isShieldCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point); // Return true if collision and return shield collision point
 void resolveShieldCollision(Shield& shield, const Position& shield_collision_point);
-void drawAlienSwarm(const AlienSwarm& aliens);
+
+void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm);
+bool isAlienCollision(const Position& projectile, const Alien& alien); // Return true if collision
+void resolveAlienCollision(Alien& alien);
 
 /// <summary>
 /// ////////////////////////////////////////////////////

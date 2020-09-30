@@ -22,17 +22,19 @@ private:
 protected:
 	Position position;
 	std::vector<std::vector<Alien>> aliens;
+	int numAliensLeft;
 public:
 	AlienSwarm();//(Game game);
 
 	// GET METHODS
 	inline Position getPosition() const { return position; }
 	inline std::vector<std::vector<Alien>> getAliens() const { return aliens; }
+	inline int getNumAliensLeft() const { return numAliensLeft; }
 
 	// SET METHODS
 	inline void setPosition(const int& x, const int& y) { this->position.x = x; this->position.y = y; }
-
-	void draw() const;
+	inline std::vector<std::vector<Alien>>& setAliens() { return aliens; }
+	inline void setNumAliensLeft(int num_aliens_left) { numAliensLeft = num_aliens_left; }
 };
 
 /*enum {
@@ -55,8 +57,6 @@ struct AlienSwarm {
 	int direction; // > 0 - for going rigth, < 0 - for going left, 1 or -1
 	int numberOfBombsInPlay;
 	int movementTime; // This is going to capture how fast the aliens should be going
-	int explosionTimer; // This is going to capture how long to explode for
-	int numAliensLeft; // This is to capture when to go to the next level
 	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
 };
 
@@ -69,8 +69,4 @@ INIT ALIENS
 	position.x = game.windowSize.width - NUM_ALIENS_COLS * aliens.spriteSize.width / 2;
 	position.y = game.windowSize.heigth - NUM_ALIENS_COLS - NUMS_ALIENS_ROWS * aliens.spriteSize.heigth - NUM_ALIENS_ROWS - 1 - 3 + game.level
 	aliens.line = NUM_ALIENS_COLS - (game.level - 1);
-	aliens.explosionTimer = 0;
-
-
-
 */
