@@ -17,7 +17,6 @@ private:
 	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
 	static constexpr int DEF_SPEED{ 1 };
 	static constexpr int DEF_MAX_NUM_LIVES{ 3 };
-	static constexpr int DEF_SPEED_MISSILE{ 1 };
 protected:
 	Missile missile;
 	int lives;

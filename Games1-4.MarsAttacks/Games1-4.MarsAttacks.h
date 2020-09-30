@@ -147,6 +147,7 @@ vector of scores
 #include "Game.h"
 #include "Player.h"
 #include "Shield.h"
+#include "AlienSwarm.h"
 
 #include <iostream>
 #include <string>
@@ -159,49 +160,17 @@ using std::string;
 
 int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
 void updateGame(const Game& game, Player& player, std::vector<Shield>& shields);
-void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields);
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens);
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 void drawShields(const std::vector<Shield>& shields);
 void checkResolveShieldCollision(Player& player, std::vector<Shield>& shields);
 bool isShieldCollision(const Position& projectile, const Shield& shield, Position& collision_position); // Return true if collision and shield collision point
 void resolveShieldCollision(Shield& shield, const Position& shield_collision_point);
+void drawAlienSwarm(const AlienSwarm& aliens);
 
 /// <summary>
 /// ////////////////////////////////////////////////////
 /// </summary>
-
-enum {
-	//SHIELD_SPRITE_HEIGTH = 3,
-	NUM_ALIEN_ROWS = 5,
-	NUM_ALIEN_COLS = 11,
-	MAX_NUM_ALIEN_BOMBS = 3,
-};
-
-enum class AlienState {
-	ALIVE = 0,
-	DEAD,
-	EXPLODING
-};
-
-struct AlienBomb
-{
-	Position position;
-	int animation;
-};
-
-struct AlienSwarm {
-	Position position;
-	AlienState aliens[NUM_ALIEN_ROWS][NUM_ALIEN_COLS];
-	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
-	Size spriteSize;
-	int animation;
-	int direction; // > 0 - for going rigth, < 0 - for going left, 1 or -1
-	int numberOfBombsInPlay;
-	int movementTime; // This is going to capture how fast the aliens should be going
-	int explosionTimer; // This is going to capture how long to explode for
-	int numAliensLeft; // This is to capture when to go to the next level
-	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
-};
 
 struct AlienUFO {
 	Position position;
@@ -217,3 +186,9 @@ struct Score {
 struct HighScoreTable {
 	std::vector<Score> scores;
 };
+
+/*
+TO DO LIST
+
+-Check usage of constants in classes when are needed outside of the class => Change them to public static const?
+*/

@@ -26,10 +26,9 @@ void Player::move(const Game& game, const bool& direction_right) {
 	else {
 		dx = -DEF_SPEED;
 	}
-
-	if (position.x + spriteSize.width + dx > game.windowSize.width) // Make sure the player doesn't go off the screen to the right
+	if (position.x + spriteSize.width + dx > game.getSize().width) // Make sure the player doesn't go off the screen to the right
 	{
-		position.x = game.windowSize.width - spriteSize.width; // The most right position the player can be
+		position.x = game.getSize().width - spriteSize.width; // The most right position the player can be
 	}
 	else if (position.x + dx < 0) // Make sure the player doesn't go off the screen to the left
 	{
@@ -52,7 +51,7 @@ void Player::moveMissile() {
 	if (missile.getPosition().y != DEF_NOT_IN_PLAY)
 	{
 		if (!isShootingMissile) {
-			missile.setPosition(missile.getPosition().x, missile.getPosition().y - DEF_SPEED_MISSILE);
+			missile.setPosition(missile.getPosition().x, missile.getPosition().y - missile.getSpeed());
 		}
 		else {
 			isShootingMissile = false;

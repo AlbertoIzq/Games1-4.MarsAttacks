@@ -12,6 +12,7 @@ int main(void)
     Game game;
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
+    AlienSwarm aliens;
     
     initializeCurses(true); // PDCurses
 
@@ -31,7 +32,7 @@ int main(void)
 
                 updateGame(game, player, shields);
                 clearScreen(); // PDCurses
-                drawGame(game, player, shields);
+                drawGame(game, player, shields, aliens);
                 refreshScreen(); // PDCurses
             }            
         }
@@ -72,15 +73,25 @@ void updateGame(const Game& game, Player& player, std::vector<Shield>& shields) 
     checkResolveShieldCollision(player, shields);
 }
 
-void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields) {
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens) {
     player.draw();
     player.getMissile().draw();
     drawShields(shields);
+    drawAlienSwarm(aliens);
 }
 
 void drawShields(const std::vector<Shield>& shields) {
     for (auto s : shields) {
         s.draw();
+    }
+}
+
+void drawAlienSwarm(const AlienSwarm& aliens) {
+    std::vector<std::vector<Alien>>::iterator it;
+    for (auto alien_row : aliens.getAliens()) {
+        for (auto alien : alien_row) {
+            alien.draw();
+        }
     }
 }
 
@@ -140,30 +151,3 @@ void resolveShieldCollision(Shield& shield, const Position& shield_collision_poi
     current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' ';
     shield.setSprite(current_sprite);
 }
-
-/*void resolveShieldCollision(std::vector<Shield>& shields, const Position& shield_collision_point);
-    std::vector<std::string> current_sprite = shields.at(shield_index).getSprite();
-    current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' ';
-    shields.at(shield_index).setSprite(current_sprite);
-}*/
-
-/*int isCollision(const Position& projectile, const std::vector<Shield>& shields, Position& shield_collision_point) {
-    shield_collision_point.x = DEF_POSITION_NOT_IN_PLAY;
-    shield_collision_point.y = DEF_POSITION_NOT_IN_PLAY;
-
-    if (projectile.y != DEF_POSITION_NOT_IN_PLAY) {
-        for (int i{ 0 }; i < DEF_NUM_SHIELDS; i++) {
-            const Shield& shield = shields.at(i);
-
-            if (projectile.x >= shield.getPosition().x && projectile.x < (shield.getPosition().x + shield.getSpriteSize().width) // Is it in line horizontally?
-            && projectile.y >= shield.getPosition().y && projectile.y < (shield.getPosition().y + shield.getSpriteSize().height) // And vertically?
-            && shield.getSprite().at(projectile.y - shield.getPosition().y).at(projectile.x - shield.getPosition().x) != ' ') {
-                // There is a collision
-                shield_collision_point.x = projectile.x - shield.getPosition().x;
-                shield_collision_point.y = projectile.y - shield.getPosition().y;
-                return i;
-            }
-        }
-    }
-    return DEF_POSITION_NOT_IN_PLAY;
-}*/

@@ -12,7 +12,7 @@ private:
 	static constexpr int DEF_SPRITE_WIDTH{ 1 };
 	static constexpr int DEF_SPRITE_HEIGHT{ 1 };
 	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
-	static constexpr int DEF_SPEED{ 2 };
+	static constexpr int DEF_SPEED{ 1 };
 protected:
 public:
 	Missile();
