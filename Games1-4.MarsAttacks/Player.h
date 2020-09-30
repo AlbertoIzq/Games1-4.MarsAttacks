@@ -45,8 +45,4 @@ public:
 
 	void shootMissile();
 	void moveMissile();
-	void resetMissile();
 };
-
-
-
