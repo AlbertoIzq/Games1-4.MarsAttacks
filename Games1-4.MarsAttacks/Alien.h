@@ -31,6 +31,9 @@ public:
 	static const std::vector<std::string> DEF_SPRITE_10P_2; // Initialized in .cpp
 	static const std::vector<std::string> DEF_SPRITE_EXPLOSION; // Initialized in .cpp
 	static constexpr int DEF_EXPLOSION_TIME{ 4 };
+	static constexpr int DEF_10P_POINTS{ 10 };
+	static constexpr int DEF_20P_POINTS{ 20 };
+	static constexpr int DEF_30P_POINTS{ 30 };
 protected:
 	Alien_State alienState;
 	Alien_Type alienType;

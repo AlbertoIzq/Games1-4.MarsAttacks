@@ -159,7 +159,8 @@ void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm) {
         for (auto& alien_row : alien_swarm.setAliens()) {
             for (auto& alien : alien_row) {
                 if (isAlienCollision(player.getMissile().getPosition(), alien)) {
-                    resolveAlienCollision(alien);
+                    resolveAlienCollision(player, alien);
+                    alien_swarm.setNumAliensLeft(alien_swarm.getNumAliensLeft() - 1);
                     player.resetMissile();
                     break;
                 }
@@ -179,7 +180,23 @@ bool isAlienCollision(const Position& projectile, const Alien& alien) {
     return is_collision;
 }
 
-void resolveAlienCollision(Alien& alien) {
+void resolveAlienCollision(Player& player, Alien& alien) {
     alien.setAlienState(Alien_State::AS_EXPLODING);
-    // get score for player
+    if (alien.getExplosionTimer() == DEF_NOT_IN_PLAY) {
+        alien.setExplosionTimer(Alien::DEF_EXPLOSION_TIME);
+    }
+
+
+    // Incrementing player's score
+    switch (alien.getAlienType()) {
+    case Alien_Type::AT_10P:
+        player.setScore(player.getScore() + Alien::DEF_10P_POINTS);
+        break;
+    case Alien_Type::AT_20P:
+        player.setScore(player.getScore() + Alien::DEF_20P_POINTS);
+        break;
+    case Alien_Type::AT_30P:
+        player.setScore(player.getScore() + Alien::DEF_30P_POINTS);
+        break;
+    }
 }

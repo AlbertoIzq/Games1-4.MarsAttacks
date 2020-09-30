@@ -169,9 +169,9 @@ void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields);
 bool isShieldCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point); // Return true if collision and return shield collision point
 void resolveShieldCollision(Shield& shield, const Position& shield_collision_point);
 
-void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm);
+void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm); // It also increments player's score
 bool isAlienCollision(const Position& projectile, const Alien& alien); // Return true if collision
-void resolveAlienCollision(Alien& alien);
+void resolveAlienCollision(Player& player, Alien& alien);
 
 /// <summary>
 /// ////////////////////////////////////////////////////
