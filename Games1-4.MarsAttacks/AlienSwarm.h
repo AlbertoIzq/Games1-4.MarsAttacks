@@ -63,14 +63,11 @@ struct AlienBomb
 struct AlienSwarm {
 	AlienState aliens[NUM_ALIEN_ROWS][NUM_ALIEN_COLS];
 	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
-	Size spriteSize;
 	int numberOfBombsInPlay;
 };
 
 INIT ALIENS
 
-	direction = right
-	numAliensLeft = num aliens rows * num aliens cols
 	animation = 0
 	numberOfBombsInPlay = 0
 	position.x = game.windowSize.width - NUM_ALIENS_COLS * aliens.spriteSize.width / 2;

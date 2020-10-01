@@ -167,9 +167,9 @@ std::vector<Shield> iniShields(const Game& game, const Player& player);
 void drawShields(const std::vector<Shield>& shields);
 void drawAlienSwarm(const AlienSwarm& alien_swarm);
 
-void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields);
-bool isShieldCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point); // Return true if collision and return shield collision point
-void resolveShieldCollision(Shield& shield, const Position& shield_collision_point);
+void checkResolveShieldsMissileCollision(Player& player, std::vector<Shield>& shields);
+bool isShieldMissileCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point); // Return true if collision and return shield collision point
+void resolveShieldMissileCollision(Shield& shield, const Position& shield_collision_point);
 
 void updateAlienSwarm(const Game& game, Player& player, AlienSwarm& alien_swarm);
 void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm); // It also increments player's score

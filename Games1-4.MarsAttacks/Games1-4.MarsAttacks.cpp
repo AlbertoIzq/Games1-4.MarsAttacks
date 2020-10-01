@@ -70,7 +70,7 @@ int handleInput(const Game& game, Player& player) {
 
 void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
     player.moveMissile();
-    checkResolveShieldsCollision(player, shields);
+    checkResolveShieldsMissileCollision(player, shields);
     updateAlienSwarm(game, player, alien_swarm);
 }
 
@@ -120,12 +120,12 @@ void drawAlienSwarm(const AlienSwarm& alien_swarm) {
 }
 
 
-void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields) {
+void checkResolveShieldsMissileCollision(Player& player, std::vector<Shield>& shields) {
     if (player.getMissile().getPosition().y != DEF_NOT_IN_PLAY) {
         Position collision_position{ DEF_NOT_IN_PLAY , DEF_NOT_IN_PLAY };
         for (auto& shield : shields) {
-            if (isShieldCollision(player.getMissile().getPosition(), shield, collision_position)) {
-                resolveShieldCollision(shield, collision_position);
+            if (isShieldMissileCollision(player.getMissile().getPosition(), shield, collision_position)) {
+                resolveShieldMissileCollision(shield, collision_position);
                 player.setMissile().reset();
                 break;
             }
@@ -133,7 +133,7 @@ void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields) 
     }
 }
 
-bool isShieldCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point) {
+bool isShieldMissileCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point) {
     bool is_collision{ false };
     shield_collision_point.x = DEF_NOT_IN_PLAY;
     shield_collision_point.y = DEF_NOT_IN_PLAY;
@@ -149,7 +149,7 @@ bool isShieldCollision(const Position& projectile, const Shield& shield, Positio
     return is_collision;
 }
 
-void resolveShieldCollision(Shield& shield, const Position& shield_collision_point) {
+void resolveShieldMissileCollision(Shield& shield, const Position& shield_collision_point) {
     std::vector<std::string> current_sprite = shield.getSprite();
     current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' ';
     shield.setSprite(current_sprite);
