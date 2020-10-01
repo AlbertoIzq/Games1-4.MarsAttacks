@@ -72,6 +72,7 @@ void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, 
     player.moveMissile();
     checkResolveShieldsCollision(player, shields);
     checkResolveAlienSwarmCollision(player, alien_swarm);
+    updateAlienSwarmExplosions(alien_swarm);
 }
 
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens) {
@@ -196,5 +197,13 @@ void resolveAlienCollision(Player& player, Alien& alien) {
     case Alien_Type::AT_30P:
         player.setScore(player.getScore() + Alien::DEF_30P_POINTS);
         break;
+    }
+}
+
+void updateAlienSwarmExplosions(AlienSwarm& alien_swarm) {
+    for (auto& alien_row : alien_swarm.setAliens()) {
+        for (auto& alien : alien_row) {
+            alien.updateExplosion();
+        }
     }
 }

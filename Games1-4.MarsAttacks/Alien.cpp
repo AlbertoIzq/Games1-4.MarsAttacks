@@ -32,6 +32,16 @@ void Alien::setSpriteDependingOnState() {
 	}
 }
 
+void Alien::updateExplosion() {
+	if (explosionTimer >= 0) {
+		explosionTimer--;
+	}
+	else if (explosionTimer < 0 && alienState == Alien_State::AS_EXPLODING) {
+		explosionTimer = DEF_NOT_IN_PLAY;
+		alienState = Alien_State::AS_DEAD;
+	}
+}
+
 void Alien::draw() const {
 	if (alienState != Alien_State::AS_DEAD) {
 		drawSprite(position.x, position.y, sprite, spriteSize.height);

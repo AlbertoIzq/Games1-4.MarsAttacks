@@ -42,9 +42,6 @@ public:
 	Alien();
 	virtual ~Alien() = default;
 
-	void setSpriteDependingOnState();
-	virtual void draw() const override;
-
 	// GET METHODS
 	inline Alien_State getAlienState() const { return alienState; }
 	inline Alien_Type getAlienType() const { return alienType; }
@@ -54,4 +51,9 @@ public:
 	inline void setAlienState(const Alien_State alien_state) { alienState = alien_state; }
 	inline void setAlienType(const Alien_Type alien_type) { alienType = alien_type; }
 	inline void setExplosionTimer(const int explosion_timer) { explosionTimer = explosion_timer; }
+
+	void setSpriteDependingOnState();
+	void updateExplosion();
+
+	virtual void draw() const override;
 };

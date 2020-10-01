@@ -171,7 +171,8 @@ void resolveShieldCollision(Shield& shield, const Position& shield_collision_poi
 
 void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm); // It also increments player's score
 bool isAlienCollision(const Position& projectile, const Alien& alien); // Return true if collision
-void resolveAlienCollision(Player& player, Alien& alien);
+void resolveAlienCollision(Player& player, Alien& alien); // Alien starts exploding and player get points
+void updateAlienSwarmExplosions(AlienSwarm& alien_swarm);
 
 /// <summary>
 /// ////////////////////////////////////////////////////
