@@ -23,18 +23,30 @@ protected:
 	Position position;
 	std::vector<std::vector<Alien>> aliens;
 	int numAliensLeft;
+	bool directionRight; // True if direction = right, false if direction = left, (> 0 means right in tutorial)
+	int movementTimer; // This is going to capture how fast the aliens should be going
+	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
 public:
-	AlienSwarm();//(Game game);
+	AlienSwarm(const Game& game);
 
 	// GET METHODS
 	inline Position getPosition() const { return position; }
 	inline std::vector<std::vector<Alien>> getAliens() const { return aliens; }
 	inline int getNumAliensLeft() const { return numAliensLeft; }
+	inline bool getDirectionRight() const { return directionRight; }
+	inline int getMovementTimer() const { return movementTimer; }
+	inline int getLine() const { return line; }
 
 	// SET METHODS
-	inline void setPosition(const int& x, const int& y) { this->position.x = x; this->position.y = y; }
+	void setPositionDiff(const int& dx, const int& dy);
 	inline std::vector<std::vector<Alien>>& setAliens() { return aliens; }
-	inline void setNumAliensLeft(int num_aliens_left) { numAliensLeft = num_aliens_left; }
+	inline void setNumAliensLeft(const int& num_aliens_left) { numAliensLeft = num_aliens_left; }
+	inline void setDirectionRight(const bool& direction_right) { directionRight = direction_right; }
+	inline void setMovementTimer(const int& movement_timer) { movementTimer = movement_timer; }
+	inline void setLine(const int& line) { this->line = line; }
+
+	void resetMovementTimer();
+	void getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const;
 };
 
 /*enum {
@@ -49,15 +61,10 @@ struct AlienBomb
 };
 
 struct AlienSwarm {
-	Position position;
 	AlienState aliens[NUM_ALIEN_ROWS][NUM_ALIEN_COLS];
 	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
 	Size spriteSize;
-	int animation;
-	int direction; // > 0 - for going rigth, < 0 - for going left, 1 or -1
 	int numberOfBombsInPlay;
-	int movementTime; // This is going to capture how fast the aliens should be going
-	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
 };
 
 INIT ALIENS
@@ -68,5 +75,4 @@ INIT ALIENS
 	numberOfBombsInPlay = 0
 	position.x = game.windowSize.width - NUM_ALIENS_COLS * aliens.spriteSize.width / 2;
 	position.y = game.windowSize.heigth - NUM_ALIENS_COLS - NUMS_ALIENS_ROWS * aliens.spriteSize.heigth - NUM_ALIENS_ROWS - 1 - 3 + game.level
-	aliens.line = NUM_ALIENS_COLS - (game.level - 1);
 */

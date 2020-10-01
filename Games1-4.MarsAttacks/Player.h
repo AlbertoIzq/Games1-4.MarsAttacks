@@ -37,8 +37,8 @@ public:
 
 	// SET METHODS
 	inline Missile& setMissile() { return missile; }
-	inline void setLives(int lives) { this->lives = lives; };
-	inline void setScore(int score) { this->score = score; };
+	inline void setLives(const int& lives) { this->lives = lives; };
+	inline void setScore(const int& score) { this->score = score; };
 
 	void move(const Game& game, const bool& direction_right);
 	void resetPosition();

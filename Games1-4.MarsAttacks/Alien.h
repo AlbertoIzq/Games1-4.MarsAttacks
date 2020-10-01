@@ -34,10 +34,12 @@ public:
 	static constexpr int DEF_10P_POINTS{ 10 };
 	static constexpr int DEF_20P_POINTS{ 20 };
 	static constexpr int DEF_30P_POINTS{ 30 };
+	static constexpr int DEF_ANIMATION{ 1 };
 protected:
 	Alien_State alienState;
 	Alien_Type alienType;
 	int explosionTimer; // This is going to capture how long to explode for
+	int animation; // To switch between two sprites when state is Alive, 1 or 2
 public:
 	Alien();
 	virtual ~Alien() = default;
@@ -46,11 +48,13 @@ public:
 	inline Alien_State getAlienState() const { return alienState; }
 	inline Alien_Type getAlienType() const { return alienType; }
 	inline int getExplosionTimer() const { return explosionTimer; }
+	inline int getAnimation() const { return animation; }
 
 	// SET METHODS
-	inline void setAlienState(const Alien_State alien_state) { alienState = alien_state; }
-	inline void setAlienType(const Alien_Type alien_type) { alienType = alien_type; }
-	inline void setExplosionTimer(const int explosion_timer) { explosionTimer = explosion_timer; }
+	inline void setAlienState(const Alien_State& alien_state) { alienState = alien_state; }
+	inline void setAlienType(const Alien_Type& alien_type) { alienType = alien_type; }
+	inline void setExplosionTimer(const int& explosion_timer) { explosionTimer = explosion_timer; }
+	inline void setAnimation(const int& animation) { this->animation = animation; }
 
 	void setSpriteDependingOnState();
 	void updateExplosion();

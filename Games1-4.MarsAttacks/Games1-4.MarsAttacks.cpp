@@ -12,7 +12,7 @@ int main(void)
     Game game;
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
-    AlienSwarm alien_swarm;
+    AlienSwarm alien_swarm(game);
     
     initializeCurses(true); // PDCurses
 
@@ -71,8 +71,7 @@ int handleInput(const Game& game, Player& player) {
 void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
     player.moveMissile();
     checkResolveShieldsCollision(player, shields);
-    checkResolveAlienSwarmCollision(player, alien_swarm);
-    updateAlienSwarmExplosions(alien_swarm);
+    updateAlienSwarm(game, player, alien_swarm);
 }
 
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens) {
@@ -120,6 +119,7 @@ void drawAlienSwarm(const AlienSwarm& alien_swarm) {
     }
 }
 
+
 void checkResolveShieldsCollision(Player& player, std::vector<Shield>& shields) {
     if (player.getMissile().getPosition().y != DEF_NOT_IN_PLAY) {
         Position collision_position{ DEF_NOT_IN_PLAY , DEF_NOT_IN_PLAY };
@@ -153,6 +153,13 @@ void resolveShieldCollision(Shield& shield, const Position& shield_collision_poi
     std::vector<std::string> current_sprite = shield.getSprite();
     current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' ';
     shield.setSprite(current_sprite);
+}
+
+
+void updateAlienSwarm(const Game& game, Player& player, AlienSwarm& alien_swarm) {
+    checkResolveAlienSwarmCollision(player, alien_swarm);
+    updateAlienSwarmExplosions(alien_swarm);
+    updateAlienSwarmMovement(game, alien_swarm);
 }
 
 void checkResolveAlienSwarmCollision(Player& player, AlienSwarm& alien_swarm) {
@@ -206,4 +213,41 @@ void updateAlienSwarmExplosions(AlienSwarm& alien_swarm) {
             alien.updateExplosion();
         }
     }
+}
+
+void updateAlienSwarmMovement(const Game& game, AlienSwarm& alien_swarm) {
+    alien_swarm.setMovementTimer(alien_swarm.getMovementTimer() - 1);
+
+    bool move_horizontal = 0 >= alien_swarm.getMovementTimer();
+
+    Alien alien_left;
+    Alien alien_right;
+    Alien alien_bottom;
+
+    alien_swarm.getAlienLeftRightBottom(alien_left, alien_right, alien_bottom);
+
+    // Move downwards
+    if (((alien_right.getPosition().x + alien_right.getSpriteSize().width) >= game.getSize().width && alien_swarm.getDirectionRight()) ||
+        (alien_left.getPosition().x <= 0 && !alien_swarm.getDirectionRight()) && move_horizontal && alien_swarm.getLine() > 0) {
+        move_horizontal = false;
+        alien_swarm.setPositionDiff(0, 1);
+        alien_swarm.setLine(alien_swarm.getLine() - 1);
+        alien_swarm.setDirectionRight(!alien_swarm.getDirectionRight());
+        alien_swarm.resetMovementTimer();
+    }
+
+    if (move_horizontal) {
+        if (alien_swarm.getDirectionRight()) {
+            alien_swarm.setPositionDiff(1, 0);
+        }
+        else {
+            alien_swarm.setPositionDiff(-1, 0);
+        }
+        alien_swarm.resetMovementTimer();
+        // change aliens animation
+    }
+    
+
+
+
 }

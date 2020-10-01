@@ -22,4 +22,4 @@ int screenHeight();
 int getChar();
 void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character);
 void moveCursor(const int& x_pos, const int& y_pos);
-void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite, const int& sprite_height, const int& offset = 0);
+void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite, const int& sprite_height);

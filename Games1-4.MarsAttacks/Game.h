@@ -32,7 +32,12 @@ protected:
 public:
 	Game();
 
-	Size getSize() const { return windowSize; }
+	// GET METHODS
+	inline Size getSize() const { return windowSize; }
+	inline int getLevel() const { return level; }
+
+	// SET METHODS
+	inline void setLevel(int level) { this->level = level; }
 
 	void setConsoleWindowSize(); // Sets window size to default values
 };
