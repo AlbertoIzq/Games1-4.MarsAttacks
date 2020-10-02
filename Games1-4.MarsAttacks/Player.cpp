@@ -48,7 +48,7 @@ void Player::shootMissile() {
 }
 
 void Player::moveMissile() {
-	if (missile.getPosition().y != DEF_NOT_IN_PLAY)
+	if (missile.getPosition().y != DEF_NOT_IN_PLAY || missile.getPosition().x != DEF_NOT_IN_PLAY)
 	{
 		if (!isShootingMissile) {
 			missile.setPosition(missile.getPosition().x, missile.getPosition().y - missile.getSpeed());

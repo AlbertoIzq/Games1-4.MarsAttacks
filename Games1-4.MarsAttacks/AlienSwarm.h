@@ -29,6 +29,9 @@ protected:
 	int movementTimer; // This is going to capture how fast the aliens should be going
 	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
 	std::vector<AlienBomb> bombs;
+	int numBombsInPlay;
+
+	bool isShootingBomb;
 
 public:
 	AlienSwarm(const Game& game);
@@ -40,6 +43,8 @@ public:
 	inline bool getDirectionRight() const { return directionRight; }
 	inline int getMovementTimer() const { return movementTimer; }
 	inline int getLine() const { return line; }
+	inline std::vector<AlienBomb> getBombs() const { return bombs; }
+	inline int getNumBombsInPlay() const { return numBombsInPlay; }
 
 	// SET METHODS
 	void setPositionDiff(const int& dx, const int& dy);
@@ -48,10 +53,14 @@ public:
 	inline void setDirectionRight(const bool& direction_right) { directionRight = direction_right; }
 	inline void setMovementTimer(const int& movement_timer) { movementTimer = movement_timer; }
 	inline void setLine(const int& line) { this->line = line; }
+	inline void setNumBombsInPlay(const int& num_bombs_in_play) { numBombsInPlay = num_bombs_in_play; }
 
 	void resetMovementTimer();
 	void getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const;
 	bool shouldShootBomb();
+	bool getAlienToShootBomb(Alien& alien); // Returns true if there is an alien available to shoot
+	void shootBomb(const Alien& alien);
+	void moveBombs(const Game& game);
 };
 
 /*enum {
