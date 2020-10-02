@@ -117,7 +117,7 @@ void updateAlienSwarm(const Game& game, Player& player, AlienSwarm& alien_swarm,
     checkResolveAlienSwarmMissileCollision(player, alien_swarm);
     updateAlienSwarmExplosions(alien_swarm);
     updateAlienSwarmMovementAndShieldCollision(game, alien_swarm, shields);
-    updateAlienSwarmBombs(game, alien_swarm, shields);
+    updateAlienSwarmBombs(game, alien_swarm, shields, player);
 }
 
 
@@ -298,12 +298,32 @@ void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien) {
 }
 
 
-void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
+void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields, Player& player) {
     alien_swarm.moveChangeAnimationBombs(game);
 
     for (auto& bomb : alien_swarm.setBombs()) {
         checkResolveShieldsBombCollision(alien_swarm, bomb, shields);
+        checkResolvePlayerBombCollision(alien_swarm, bomb, player);
     }
+}
+
+void checkResolvePlayerBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, Player& player) {
+    if (isCollision(bomb.getPosition(), player.getPosition(), player.getSpriteSize())) {
+        // resolve Player collision
+        bomb.reset();
+        alien_swarm.setNumBombsInPlay(alien_swarm.getNumBombsInPlay() - 1);
+    }
+}
+
+bool isCollision(const Position& projectile, const Position& object_position, const Size& object_size) {
+    bool is_collision{ false };
+
+    if (projectile.x >= object_position.x && projectile.x < (object_position.x + object_size.width) // Is it in line horizontally?
+        && projectile.y >= object_position.y && projectile.y < (object_position.y + object_size.height)) { // And vertically?
+            // There is a collision
+        is_collision = true;
+    }
+    return is_collision;
 }
 
 void checkResolveShieldsBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, std::vector<Shield>& shields) {

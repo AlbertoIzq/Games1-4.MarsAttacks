@@ -182,8 +182,10 @@ void updateAlienSwarmMovementAndShieldCollision(const Game& game, AlienSwarm& al
 void checkResolveAlienSwarmShieldsCollision(const AlienSwarm& alien_swarm, std::vector<Shield>& shields);
 void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien);
 
-void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
+void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields, Player& player);
 void checkResolveShieldsBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, std::vector<Shield>& shields);
+void checkResolvePlayerBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, Player& player);
+bool isCollision(const Position& projectile, const Position& object_position, const Size& object_size);
 
 void drawShields(const std::vector<Shield>& shields);
 void drawAlienSwarm(const AlienSwarm& alien_swarm);
