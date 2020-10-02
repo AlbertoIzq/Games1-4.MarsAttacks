@@ -2,12 +2,13 @@
 
 // Initialization of class structs default values (They cannot be initialized in .h)
 const int AlienSwarm::DEF_INI_POSITION_X = (Game::DEF_WINDOW_SIZE.width - DEF_NUM_COLS * (Alien::DEF_SPRITE_WIDTH + DEF_PADDING_X)) / 2;
-const int AlienSwarm::DEF_INI_POSITION_Y = Game::DEF_WINDOW_SIZE.height - DEF_NUM_COLS - DEF_NUM_ROWS * Alien::DEF_SPRITE_HEIGHT - DEF_PADDING_Y * (DEF_NUM_ROWS - 1) - 3; //+game.level;
+const int AlienSwarm::DEF_INI_POSITION_Y = Game::DEF_WINDOW_SIZE.height - DEF_NUM_COLS - DEF_NUM_ROWS * Alien::DEF_SPRITE_HEIGHT - DEF_PADDING_Y * (DEF_NUM_COLS - 1) - 3;
 const Position AlienSwarm::DEF_INI_POSITION{ DEF_INI_POSITION_X , DEF_INI_POSITION_Y };
 
 AlienSwarm::AlienSwarm(const Game& game)
 	: position{ DEF_INI_POSITION }, numAliensLeft{ 0 }, directionRight{ true } {
-	//position.y += game.level;
+	
+	position.y += game.getLevel();
 
 	// 1 row - 30 Points aliens
 	for (int row{ 0 }; row < DEF_NUM_ROWS_30P; row++) {
@@ -56,6 +57,11 @@ AlienSwarm::AlienSwarm(const Game& game)
 
 	resetMovementTimer();
 	line = DEF_NUM_COLS - game.getLevel() - 1;
+
+	for (int i{ 0 }; i < DEF_MAX_NUM_BOMBS; i++) {
+		AlienBomb alien_bomb;
+		bombs.push_back(alien_bomb);
+	}
 }
 
 void AlienSwarm::setPositionDiff(const int& dx, const int& dy) {

@@ -3,10 +3,13 @@
 // Initialization of class structs default values (They cannot be initialized in .h)
 const Position AlienBomb::DEF_INI_POSITION{ DEF_INI_POSITION_X , DEF_INI_POSITION_Y };
 const Size AlienBomb::DEF_SPRITE_SIZE{ DEF_SPRITE_WIDTH, DEF_SPRITE_HEIGHT };
-const std::vector<std::string> AlienBomb::DEF_SPRITE{ "*" };
+const std::vector<std::string> AlienBomb::DEF_SPRITE_1{ "|" };
+const std::vector<std::string> AlienBomb::DEF_SPRITE_2{ "/" };
+const std::vector<std::string> AlienBomb::DEF_SPRITE_3{ "-" };
+const std::vector<std::string> AlienBomb::DEF_SPRITE_4{ "\\" };
 
 AlienBomb::AlienBomb()
-	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED } {
+	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE_1, DEF_SPEED } {
 }
 
 void AlienBomb::draw() const {

@@ -11,8 +11,11 @@ private:
 	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
 	static constexpr int DEF_SPRITE_WIDTH{ 1 };
 	static constexpr int DEF_SPRITE_HEIGHT{ 1 };
-	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
-	static constexpr int DEF_SPEED{ 1 };
+	static const std::vector<std::string> DEF_SPRITE_1; // Initialized in .cpp
+	static const std::vector<std::string> DEF_SPRITE_2; // Initialized in .cpp
+	static const std::vector<std::string> DEF_SPRITE_3; // Initialized in .cpp
+	static const std::vector<std::string> DEF_SPRITE_4; // Initialized in .cpp
+	static constexpr int DEF_SPEED{ 2 };
 protected:
 public:
 	AlienBomb();

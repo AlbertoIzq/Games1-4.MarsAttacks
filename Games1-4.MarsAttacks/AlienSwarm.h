@@ -2,6 +2,7 @@
 
 #include "Game.h"
 #include "Alien.h"
+#include "AlienBomb.h"
 #include "Other.h" // Needed for Position, Size and PDCursesUtils
 
 #include <vector>
@@ -19,6 +20,7 @@ private:
 	static constexpr int DEF_NUM_ROWS_10P{ 2 };
 	static constexpr int DEF_PADDING_X{ 1 };
 	static constexpr int DEF_PADDING_Y{ 1 };
+	static constexpr int DEF_MAX_NUM_BOMBS{ 3 };
 protected:
 	Position position;
 	std::vector<std::vector<Alien>> aliens;
@@ -26,6 +28,8 @@ protected:
 	bool directionRight; // True if direction = right, false if direction = left, (> 0 means right in tutorial)
 	int movementTimer; // This is going to capture how fast the aliens should be going
 	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
+	std::vector<AlienBomb> bombs;
+
 public:
 	AlienSwarm(const Game& game);
 
