@@ -175,12 +175,15 @@ void AlienSwarm::shootBomb(const Alien& alien) {
 		}
 	}
 }
-void AlienSwarm::moveBombs(const Game& game) {
+
+void AlienSwarm::moveChangeAnimationBombs(const Game& game) {
 	for (auto& bomb : bombs) {
 		if (bomb.getPosition().y != DEF_NOT_IN_PLAY || bomb.getPosition().x != DEF_NOT_IN_PLAY)
 		{
 			if (!isShootingBomb) {
 				bomb.setPosition(bomb.getPosition().x, bomb.getPosition().y + bomb.getSpeed());
+				bomb.updateAnimation();
+				bomb.setSpriteDependingOnAnimation();
 			}
 			else {
 				isShootingBomb = false;

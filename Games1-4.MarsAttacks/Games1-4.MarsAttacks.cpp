@@ -299,7 +299,7 @@ void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien) {
 
 
 void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
-    alien_swarm.moveBombs(game);
+    alien_swarm.moveChangeAnimationBombs(game);
 }
 
 

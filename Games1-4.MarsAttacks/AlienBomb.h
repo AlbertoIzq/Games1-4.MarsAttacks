@@ -17,11 +17,14 @@ private:
 	static const std::vector<std::string> DEF_SPRITE_4; // Initialized in .cpp
 	static constexpr int DEF_SPEED{ 2 };
 protected:
+	int animation;
 public:
 	AlienBomb();
 	virtual ~AlienBomb() = default;
 
 	virtual void draw() const override;
 
+	void updateAnimation();
+	void setSpriteDependingOnAnimation();
 	void reset();
 };

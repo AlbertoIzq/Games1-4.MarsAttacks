@@ -60,7 +60,7 @@ public:
 	bool shouldShootBomb();
 	bool getAlienToShootBomb(Alien& alien); // Returns true if there is an alien available to shoot
 	void shootBomb(const Alien& alien);
-	void moveBombs(const Game& game);
+	void moveChangeAnimationBombs(const Game& game);
 };
 
 /*enum {
