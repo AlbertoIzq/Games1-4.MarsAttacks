@@ -65,29 +65,23 @@ AlienSwarm::AlienSwarm(const Game& game)
 	}
 }
 
-/*
-	if (position.x != DEF_NOT_IN_PLAY) {
-		drawSprite(position.x, position.y, sprite, spriteSize.height);
-	}
-}*/
-
 void AlienSwarm::setPositionDiff(const int& dx, const int& dy) {
 	// Change position for alien swarm
 	position.x += dx;
 	position.y += dy;
 
-// Update position and change animation for all aliens belonging to alien swarm
-for (auto& alien_row : aliens) {
-	for (auto& alien : alien_row) {
-		alien.setPosition(alien.getPosition().x + dx, alien.getPosition().y + dy);
-		if (alien.getAnimation() == 1) {
-			alien.setAnimation(2);
-		}
-		else { // animation == 2
-			alien.setAnimation(1);
+	// Update position and change animation for all aliens belonging to alien swarm
+	for (auto& alien_row : aliens) {
+		for (auto& alien : alien_row) {
+			alien.setPosition(alien.getPosition().x + dx, alien.getPosition().y + dy);
+			if (alien.getAnimation() == 1) {
+				alien.setAnimation(2);
+			}
+			else { // animation == 2
+				alien.setAnimation(1);
+			}
 		}
 	}
-}
 }
 
 void AlienSwarm::resetMovementTimer() {
@@ -167,13 +161,16 @@ bool AlienSwarm::getAlienToShootBomb(Alien& alien) {
 }
 
 void AlienSwarm::shootBomb(const Alien& alien) {
-	for (auto& bomb : bombs) {
-		if (bomb.getPosition().x == DEF_NOT_IN_PLAY || bomb.getPosition().y == DEF_NOT_IN_PLAY) {
-			isShootingBomb = true;
-			bomb.setPosition(alien.getPosition().x + 1, alien.getPosition().y + alien.getSpriteSize().height); // x = middle of the alien, y = bottom of the alien
-			numBombsInPlay++;
+	int bomb_id{ 0 };
+	for (int i{ 0 }; i < bombs.size(); i++) {
+		if (bombs.at(i).getPosition().x == DEF_NOT_IN_PLAY || bombs.at(i).getPosition().y == DEF_NOT_IN_PLAY) {
+			bomb_id = i;
+			break;
 		}
 	}
+	isShootingBomb = true;
+	bombs.at(bomb_id).setPosition(alien.getPosition().x + 1, alien.getPosition().y + alien.getSpriteSize().height); // x = middle of the alien, y = bottom of the alien
+	numBombsInPlay++;
 }
 
 void AlienSwarm::moveChangeAnimationBombs(const Game& game) {

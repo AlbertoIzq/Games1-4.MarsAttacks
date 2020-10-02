@@ -300,6 +300,23 @@ void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien) {
 
 void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
     alien_swarm.moveChangeAnimationBombs(game);
+
+    for (auto& bomb : alien_swarm.getBombs()) {
+        checkResolveShieldsBombCollision(bomb, shields);
+    }
+}
+
+void checkResolveShieldsBombCollision(AlienBomb& bomb, std::vector<Shield>& shields) {
+    if (bomb.getPosition().y != DEF_NOT_IN_PLAY) {
+        Position collision_position{ DEF_NOT_IN_PLAY , DEF_NOT_IN_PLAY };
+        for (auto& shield : shields) {
+            if (isShieldCollision(bomb.getPosition(), shield, collision_position)) {
+                resolveShieldCollision(shield, collision_position);
+                bomb.reset();
+                break;
+            }
+        }
+    }
 }
 
 

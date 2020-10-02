@@ -21,6 +21,7 @@ void AlienBomb::draw() const {
 void AlienBomb::reset() {
 	position.x = DEF_NOT_IN_PLAY;
 	position.y = DEF_NOT_IN_PLAY;
+	animation = 1;
 }
 
 void AlienBomb::updateAnimation() {

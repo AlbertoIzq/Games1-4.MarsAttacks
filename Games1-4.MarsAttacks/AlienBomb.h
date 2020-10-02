@@ -15,7 +15,7 @@ private:
 	static const std::vector<std::string> DEF_SPRITE_2; // Initialized in .cpp
 	static const std::vector<std::string> DEF_SPRITE_3; // Initialized in .cpp
 	static const std::vector<std::string> DEF_SPRITE_4; // Initialized in .cpp
-	static constexpr int DEF_SPEED{ 2 };
+	static constexpr int DEF_SPEED{ 1 };
 protected:
 	int animation;
 public:

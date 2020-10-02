@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Alien.h"
 #include "AlienBomb.h"
+#include "Shield.h"
 #include "Other.h" // Needed for Position, Size and PDCursesUtils
 
 #include <vector>
@@ -53,6 +54,7 @@ public:
 	inline void setDirectionRight(const bool& direction_right) { directionRight = direction_right; }
 	inline void setMovementTimer(const int& movement_timer) { movementTimer = movement_timer; }
 	inline void setLine(const int& line) { this->line = line; }
+	inline std::vector<AlienBomb>& setBombs() { return bombs; }
 	inline void setNumBombsInPlay(const int& num_bombs_in_play) { numBombsInPlay = num_bombs_in_play; }
 
 	void resetMovementTimer();
@@ -62,27 +64,3 @@ public:
 	void shootBomb(const Alien& alien);
 	void moveChangeAnimationBombs(const Game& game);
 };
-
-/*enum {
-	MAX_NUM_ALIEN_BOMBS = 3,
-};
-
-
-struct AlienBomb
-{
-	Position position;
-	int animation;
-};
-
-struct AlienSwarm {
-	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
-	int numberOfBombsInPlay;
-};
-
-INIT ALIENS
-
-	animation = 0
-	numberOfBombsInPlay = 0
-	position.x = game.windowSize.width - NUM_ALIENS_COLS * aliens.spriteSize.width / 2;
-	position.y = game.windowSize.heigth - NUM_ALIENS_COLS - NUMS_ALIENS_ROWS * aliens.spriteSize.heigth - NUM_ALIENS_ROWS - 1 - 3 + game.level
-*/
