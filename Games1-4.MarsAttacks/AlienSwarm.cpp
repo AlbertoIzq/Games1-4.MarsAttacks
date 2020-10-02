@@ -114,3 +114,7 @@ void AlienSwarm::getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, 
 	}
 	found = false;
 }
+
+bool AlienSwarm::shouldShootBomb() {
+	return static_cast<int>(rand() % (70 - static_cast<int>(static_cast<float>(DEF_NUM_ROWS * DEF_NUM_COLS) / static_cast<float>(numAliensLeft + 1)))) == 1;
+}

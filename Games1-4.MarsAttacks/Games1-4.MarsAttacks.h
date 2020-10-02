@@ -152,6 +152,7 @@ vector of scores
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib> // Random numbers generation for alien bombs
 
 using std::cin;
 using std::cout;

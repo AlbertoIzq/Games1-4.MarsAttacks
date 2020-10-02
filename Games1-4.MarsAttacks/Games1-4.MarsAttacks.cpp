@@ -9,6 +9,9 @@
 
 int main(void)
 {
+    srand(time(NULL));
+
+
     Game game;
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
@@ -72,6 +75,7 @@ void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, 
     player.moveMissile();
     checkResolveShieldsMissileCollision(player, shields);
     updateAlienSwarm(game, player, alien_swarm, shields);
+    bool shoot = alien_swarm.shouldShootBomb();
 }
 
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens) {
@@ -246,6 +250,10 @@ void updateAlienSwarmMovementAndShieldCollision(const Game& game, AlienSwarm& al
         }
         alien_swarm.resetMovementTimer();
         checkResolveAlienSwarmShieldsCollision(alien_swarm, shields);
+    }
+
+    if (alien_swarm.shouldShootBomb()) {
+        // look for active column randomly  
     }
 }
 

@@ -47,6 +47,7 @@ public:
 
 	void resetMovementTimer();
 	void getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const;
+	bool shouldShootBomb();
 };
 
 /*enum {
@@ -61,7 +62,6 @@ struct AlienBomb
 };
 
 struct AlienSwarm {
-	AlienState aliens[NUM_ALIEN_ROWS][NUM_ALIEN_COLS];
 	AlienBomb bombs[MAX_NUM_ALIEN_BOMBS];
 	int numberOfBombsInPlay;
 };
