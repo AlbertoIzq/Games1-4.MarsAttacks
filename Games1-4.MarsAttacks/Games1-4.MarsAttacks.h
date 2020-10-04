@@ -161,8 +161,8 @@ using std::string;
 
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 
-int handleInput(const Game& game, Player& player); // Returns int value due to Arrow keys
-void updateGame(const Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
+int handleInput(Game& game, Player& player); // Returns int value due to Arrow keys
+void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens);
 
 void updateMissile(Player& player, std::vector<Shield>& shields);

@@ -6,9 +6,11 @@ const int Player::DEF_INI_POSITION_Y = Game::DEF_WINDOW_SIZE.height - DEF_SPRITE
 const Position Player::DEF_INI_POSITION{ DEF_INI_POSITION_X , DEF_INI_POSITION_Y };
 const Size Player::DEF_SPRITE_SIZE{ DEF_SPRITE_WIDTH, DEF_SPRITE_HEIGHT };
 const std::vector<std::string> Player::DEF_SPRITE{ " =A= ", "=====" };
+const std::vector<std::string> Player::DEF_SPRITE_DEAD_1{ ",~^.'", "====="  };
+const std::vector<std::string> Player::DEF_SPRITE_DEAD_2{ "'+-`.", "====="  };
 
 Player::Player()
-	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES }, score{ DEF_INI_SCORE }, isShootingMissile{ false } {
+	: MovingObject{ DEF_INI_POSITION, DEF_SPRITE_SIZE, DEF_SPRITE, DEF_SPEED }, lives{ DEF_MAX_NUM_LIVES }, score{ DEF_INI_SCORE }, isShootingMissile{ false }, isShot{false} {
 }
 
 void Player::move(const Game& game, const bool& direction_right) {
@@ -38,6 +40,20 @@ void Player::resetPosition() {
 	//missile =
 	//resetMissile
 }
+
+void Player::gotShot() {
+	isShot = true;
+	lives--;
+	sprite = DEF_SPRITE_DEAD_1;
+}
+
+void Player::changeDeadSprite() {
+	if (sprite == DEF_SPRITE_DEAD_1)
+		sprite = DEF_SPRITE_DEAD_2;
+	else if (sprite == DEF_SPRITE_DEAD_2)
+		sprite = DEF_SPRITE_DEAD_1;
+}
+
 
 void Player::shootMissile() {
 	if (missile.getPosition().y == DEF_NOT_IN_PLAY || missile.getPosition().x == DEF_NOT_IN_PLAY)

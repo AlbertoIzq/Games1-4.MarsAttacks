@@ -18,6 +18,7 @@ class Game
 {
 public:
 	static const Size DEF_WINDOW_SIZE; // Initialized in .cpp
+	static constexpr int DEF_WAIT_TIMER{ 30 };
 private:
 	static const int DEF_WINDOW_WIDTH{ 80 };
 	static const int DEF_WINDOW_HEIGHT{ 40 };
@@ -29,15 +30,21 @@ protected:
 	Size windowSize;
 	Game_State currentState;
 	int level;
+	int waitTimer;
 public:
 	Game();
 
 	// GET METHODS
 	inline Size getSize() const { return windowSize; }
+	inline Game_State getCurrentState() const { return currentState; }
 	inline int getLevel() const { return level; }
+	inline int getWaitTimer() const { return waitTimer; }
 
 	// SET METHODS
+	inline void setCurrentState(Game_State state) { currentState = state; }
 	inline void setLevel(int level) { this->level = level; }
+	inline void setWaitTimer(int wait_timer) { waitTimer = wait_timer; }
+	
 
 	void setConsoleWindowSize(); // Sets window size to default values
 };

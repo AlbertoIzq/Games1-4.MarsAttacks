@@ -3,7 +3,7 @@
 const Size Game::DEF_WINDOW_SIZE{ DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT };
 
 Game::Game()
-    : windowSize{ DEF_WINDOW_SIZE }, currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL } {
+    : windowSize{ DEF_WINDOW_SIZE }, currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL }, waitTimer{ DEF_WAIT_TIMER } {
     setConsoleWindowSize();
 }
 
