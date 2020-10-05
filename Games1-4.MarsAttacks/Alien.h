@@ -38,11 +38,13 @@ public:
 protected:
 	Alien_State alienState;
 	Alien_Type alienType;
-	int explosionTimer; // This is going to capture how long to explode for
+	int explosionTimer; // Timer to capture how long to explode for when hit by the player
 	int animation; // To switch between two sprites when state is Alive, 1 or 2
 public:
 	Alien();
 	virtual ~Alien() = default;
+
+	virtual void draw() const override;
 
 	// GET METHODS
 	inline Alien_State getAlienState() const { return alienState; }
@@ -57,7 +59,5 @@ public:
 	inline void setAnimation(const int& animation) { this->animation = animation; }
 
 	void setSpriteDependingOnState();
-	void updateExplosion();
-
-	virtual void draw() const override;
+	void updateExplosion(); // Manage explosion when hit by the player
 };

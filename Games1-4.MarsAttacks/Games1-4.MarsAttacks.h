@@ -153,7 +153,7 @@ vector of scores
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cstdlib> // Random numbers generation for alien bombs
+#include <cstdlib> // Random numbers generation
 
 using std::cin;
 using std::cout;
@@ -189,7 +189,7 @@ void resolveAlienMissileCollision(Player& player, Alien& alien); // Alien starts
 
 void updateAlienSwarmExplosions(AlienSwarm& alien_swarm);
 
-void updateAlienSwarmMovementAndShieldCollision(Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
+void updateAlienSwarmMovementShieldCollisionAndShooting(Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields); // Move alien swarm taking into account shield collision and shoot
 void checkResolveAlienSwarmShieldsCollision(const AlienSwarm& alien_swarm, std::vector<Shield>& shields);
 void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien);
 

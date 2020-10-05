@@ -63,7 +63,7 @@ AlienSwarm::AlienSwarm(const Game& game)
 	}
 }
 
-void AlienSwarm::setPositionDiff(const int& dx, const int& dy) {
+void AlienSwarm::movePositionDiff(const int& dx, const int& dy) {
 	// Change position for alien swarm
 	position.x += dx;
 	position.y += dy;

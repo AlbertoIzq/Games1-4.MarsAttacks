@@ -8,6 +8,6 @@ When alien swarm movement touches right side, it inmediately goes down without w
 Error occurs in "void updateAlienSwarmMovement" in "move downwards" if. "move_horizontal" is false but the whole if evaluates to true and therebefore, it moves down inmediately without waiting "movement timer" time.
 
 
-_____TO REVIEW_____
+_____TO DO_____
 
-Pause mode can be added
+Game class: Add pause mode

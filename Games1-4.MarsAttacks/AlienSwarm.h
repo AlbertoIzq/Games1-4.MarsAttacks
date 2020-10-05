@@ -27,9 +27,9 @@ protected:
 	Position position;
 	std::vector<std::vector<Alien>> aliens;
 	int numAliensLeft;
-	bool directionRight; // True if direction = right, false if direction = left, (> 0 means right in tutorial)
-	int movementTimer; // This is going to capture how fast the aliens should be going
-	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then the aliens
+	bool directionRight; // True if direction = right, false if direction = left
+	int movementTimer; // Timer to capture how fast the aliens should move
+	int line; // This is to capture when the aliens win - starts at the current level and decreases to 0 - once it's 0 then it's game over
 	std::vector<AlienBomb> bombs;
 	int numBombsInPlay;
 
@@ -49,7 +49,6 @@ public:
 	inline int getNumBombsInPlay() const { return numBombsInPlay; }
 
 	// SET METHODS
-	void setPositionDiff(const int& dx, const int& dy);
 	inline std::vector<std::vector<Alien>>& setAliens() { return aliens; }
 	inline void setNumAliensLeft(const int& num_aliens_left) { numAliensLeft = num_aliens_left; }
 	inline void setDirectionRight(const bool& direction_right) { directionRight = direction_right; }
@@ -58,11 +57,12 @@ public:
 	inline std::vector<AlienBomb>& setBombs() { return bombs; }
 	inline void setNumBombsInPlay(const int& num_bombs_in_play) { numBombsInPlay = num_bombs_in_play; }
 
+	void movePositionDiff(const int& dx, const int& dy);
 	void resetMovementTimer();
-	void getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const;
+	void getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const; // Get alien more to the left and more to the right
 	bool shouldShootBomb();
 	bool getAlienToShootBomb(Alien& alien); // Returns true if there is an alien available to shoot
 	void shootBomb(const Alien& alien);
-	void moveChangeAnimationBombs(const Game& game);
+	void moveChangeAnimationBombs(const Game& game); // Move move and update its animation
 	void reset(const Game& game);
 };

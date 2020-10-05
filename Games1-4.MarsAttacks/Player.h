@@ -30,7 +30,6 @@ protected:
 
 	bool isShootingMissile;
 	bool isShot;
-
 public:
 	Player();
 	virtual ~Player() = default;

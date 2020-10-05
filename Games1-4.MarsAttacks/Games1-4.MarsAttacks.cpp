@@ -5,8 +5,6 @@
 #include <cmath> // For computing shields padding
 #include <vector>
 
-#include <iostream>
-
 int main(void)
 {
     srand(time(NULL));
@@ -131,10 +129,12 @@ void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienS
         updateMissile(player, shields);
         updateAlienSwarm(game, player, alien_swarm, shields);
         updateUFO(game, player, ufo);
+        // If player is shot
         if (player.getIsShot()) {
             game.setCurrentState(Game_State::GS_PLAYER_DEAD);
             player.setIsShot(false);
         }
+        // When all aliens are killed, we go to next level
         if (alien_swarm.getNumAliensLeft() <= 0) {
             game.setLevel((game.getLevel() % Game::DEF_LEVEL_MAX) + 1);
             game.setCurrentState(Game_State::GS_WAIT);
@@ -142,7 +142,7 @@ void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienS
         }
     } else if (game.getCurrentState() == Game_State::GS_WAIT) {
         game.setWaitTimer(game.getWaitTimer() - 1);
-        player.changeDeadSprite();
+        player.changeDeadSprite(); // Only if it's dead
         if (game.getWaitTimer() <= 0) {
             game.setCurrentState(Game_State::GS_PLAY);
             player.setSprite(Player::DEF_SPRITE);
@@ -154,6 +154,12 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
     if (game.getCurrentState() == Game_State::GS_INTRO) {
         drawIntroScreen(game);
     }
+    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
+        drawInstructionsScreen1(game);
+    }
+    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
+        drawInstructionsScreen2(game);
+    }
     else if (game.getCurrentState() == Game_State::GS_PLAY || game.getCurrentState() == Game_State::GS_PLAYER_DEAD
     || game.getCurrentState() == Game_State::GS_WAIT) {
         drawGameStats(game, player);
@@ -163,12 +169,6 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
         drawAlienSwarm(alien_swarm);
         drawBombs(alien_swarm);
         ufo.draw();
-    }
-    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
-        drawInstructionsScreen1(game);
-    }
-    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
-        drawInstructionsScreen2(game);
     }
     else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
         drawGameOverScreen(game);
@@ -184,7 +184,7 @@ void updateMissile(Player& player, std::vector<Shield>& shields) {
 void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
     checkResolveAlienSwarmMissileCollision(player, alien_swarm);
     updateAlienSwarmExplosions(alien_swarm);
-    updateAlienSwarmMovementAndShieldCollision(game, alien_swarm, shields);
+    updateAlienSwarmMovementShieldCollisionAndShooting(game, alien_swarm, shields);
     updateAlienSwarmBombs(game, alien_swarm, shields, player);
 }
 
@@ -309,9 +309,9 @@ bool isShieldCollision(const Position& projectile, const Shield& shield, Positio
     shield_collision_point.y = DEF_NOT_IN_PLAY;
 
     if (projectile.x >= shield.getPosition().x && projectile.x < (shield.getPosition().x + shield.getSpriteSize().width) // Is it in line horizontally?
-        && projectile.y >= shield.getPosition().y && projectile.y < (shield.getPosition().y + shield.getSpriteSize().height) // And vertically?
-        && shield.getSprite().at(projectile.y - shield.getPosition().y).at(projectile.x - shield.getPosition().x) != ' ') { // Does it collide with a part of the object?
-            // There is a collision
+    && projectile.y >= shield.getPosition().y && projectile.y < (shield.getPosition().y + shield.getSpriteSize().height) // And vertically?
+    && shield.getSprite().at(projectile.y - shield.getPosition().y).at(projectile.x - shield.getPosition().x) != ' ') { // Does it collide with a part of the object?
+        // There is a collision
         shield_collision_point.x = projectile.x - shield.getPosition().x;
         shield_collision_point.y = projectile.y - shield.getPosition().y;
         is_collision = true;
@@ -321,7 +321,7 @@ bool isShieldCollision(const Position& projectile, const Shield& shield, Positio
 
 void resolveShieldCollision(Shield& shield, const Position& shield_collision_point) {
     std::vector<std::string> current_sprite = shield.getSprite();
-    current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' ';
+    current_sprite.at(shield_collision_point.y).at(shield_collision_point.x) = ' '; // Shield is destroyed where is hit
     shield.setSprite(current_sprite);
 }
 
@@ -345,8 +345,8 @@ bool isAlienMissileCollision(const Position& projectile, const Alien& alien) {
     bool is_collision{ false };
 
     if (alien.getAlienState() == Alien_State::AS_ALIVE
-        && projectile.x >= alien.getPosition().x && projectile.x < (alien.getPosition().x + alien.getSpriteSize().width)
-        && projectile.y >= alien.getPosition().y && projectile.y < (alien.getPosition().y + alien.getSpriteSize().height)) {
+    && projectile.x >= alien.getPosition().x && projectile.x < (alien.getPosition().x + alien.getSpriteSize().width)
+    && projectile.y >= alien.getPosition().y && projectile.y < (alien.getPosition().y + alien.getSpriteSize().height)) {
         is_collision = true;
     }
     return is_collision;
@@ -381,14 +381,14 @@ void updateAlienSwarmExplosions(AlienSwarm& alien_swarm) {
 }
 
 
-void updateAlienSwarmMovementAndShieldCollision(Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
+void updateAlienSwarmMovementShieldCollisionAndShooting(Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
     alien_swarm.setMovementTimer(alien_swarm.getMovementTimer() - 1);
 
     bool move_horizontal = 0 >= alien_swarm.getMovementTimer();
 
     Alien alien_left;
     Alien alien_right;
-    Alien alien_bottom;
+    Alien alien_bottom; // Useless
 
     alien_swarm.getAlienLeftRightBottom(alien_left, alien_right, alien_bottom);
 
@@ -396,7 +396,7 @@ void updateAlienSwarmMovementAndShieldCollision(Game& game, AlienSwarm& alien_sw
     if (((alien_right.getPosition().x + alien_right.getSpriteSize().width) >= game.getWindowSize().width && alien_swarm.getDirectionRight()) ||
         (alien_left.getPosition().x <= 0 && !alien_swarm.getDirectionRight()) && move_horizontal && alien_swarm.getLine() > 0) {
         move_horizontal = false;
-        alien_swarm.setPositionDiff(0, 1);
+        alien_swarm.movePositionDiff(0, 1);
         alien_swarm.setLine(alien_swarm.getLine() - 1);
         alien_swarm.setDirectionRight(!alien_swarm.getDirectionRight());
         alien_swarm.resetMovementTimer();
@@ -410,10 +410,10 @@ void updateAlienSwarmMovementAndShieldCollision(Game& game, AlienSwarm& alien_sw
     // Move horizontally
     if (move_horizontal) {
         if (alien_swarm.getDirectionRight()) {
-            alien_swarm.setPositionDiff(1, 0);
+            alien_swarm.movePositionDiff(1, 0);
         }
         else {
-            alien_swarm.setPositionDiff(-1, 0);
+            alien_swarm.movePositionDiff(-1, 0);
         }
         alien_swarm.resetMovementTimer();
         checkResolveAlienSwarmShieldsCollision(alien_swarm, shields);
@@ -473,7 +473,6 @@ void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien) {
 
 void updateAlienSwarmBombs(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields, Player& player) {
     alien_swarm.moveChangeAnimationBombs(game);
-
     for (auto& bomb : alien_swarm.setBombs()) {
         checkResolveShieldsBombCollision(alien_swarm, bomb, shields);
         checkResolvePlayerBombCollision(alien_swarm, bomb, player);
@@ -492,8 +491,8 @@ bool isCollision(const Position& projectile, const Position& object_position, co
     bool is_collision{ false };
 
     if (projectile.x >= object_position.x && projectile.x < (object_position.x + object_size.width) // Is it in line horizontally?
-        && projectile.y >= object_position.y && projectile.y < (object_position.y + object_size.height)) { // And vertically?
-            // There is a collision
+    && projectile.y >= object_position.y && projectile.y < (object_position.y + object_size.height)) { // And vertically?
+        // There is a collision
         is_collision = true;
     }
     return is_collision;
@@ -525,6 +524,7 @@ void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo) {
         }
     }
 }
+
 
 void drawShields(const std::vector<Shield>& shields) {
     for (const auto& shield : shields) {

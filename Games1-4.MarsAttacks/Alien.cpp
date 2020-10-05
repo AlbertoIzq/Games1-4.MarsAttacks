@@ -16,6 +16,12 @@ Alien::Alien()
 	alienType{ Alien_Type::AT_10P }, explosionTimer{ DEF_NOT_IN_PLAY }, animation{ DEF_ANIMATION } {
 }
 
+void Alien::draw() const {
+	if (alienState != Alien_State::AS_DEAD) {
+		drawSprite(position.x, position.y, sprite);
+	}
+}
+
 void Alien::setSpriteDependingOnState() {
 	switch (alienState)
 	{
@@ -69,8 +75,3 @@ void Alien::updateExplosion() {
 	}
 }
 
-void Alien::draw() const {
-	if (alienState != Alien_State::AS_DEAD) {
-		drawSprite(position.x, position.y, sprite);
-	}
-}

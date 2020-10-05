@@ -65,7 +65,7 @@ void Player::moveMissile() {
 		else {
 			isShootingMissile = false;
 		}
-		if (missile.getPosition().y < 0) {
+		if (missile.getPosition().y < 0) { // When the missile is off the screen
 			missile.reset();
 		}
 	}

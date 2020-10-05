@@ -8,7 +8,7 @@ class AlienUFO : public MovingObject
 public:
 	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
 	static constexpr int DEF_EXPLOSION_TIME{ 8 };
-	static const std::vector<std::string> DEF_SPRITE_EXPLOSION;
+	static const std::vector<std::string> DEF_SPRITE_EXPLOSION; // Initialized in .cpp
 private:
 	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
@@ -22,9 +22,9 @@ private:
 	static constexpr int DEF_APPEAR_TIME_MIN_SEC{ 10 };
 	static constexpr int DEF_APPEAR_TIME_MAX_SEC{ 30 };
 protected:
-	int appearTimer;
+	int appearTimer; // Timer to wait until UFO appears
 	int points;
-	int explosionTimer;
+	int explosionTimer; // Timer to capture how long to explode for when hit by the player
 
 	bool exploding;
 public:

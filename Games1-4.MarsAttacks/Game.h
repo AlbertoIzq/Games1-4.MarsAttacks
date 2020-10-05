@@ -2,17 +2,15 @@
 
 #include "Other.h" // // Needed for Position and Size, for "windows.h" and setConsoleWindowSize()
 
-// Needed for Position and Size
-
 enum class Game_State
 {
 	GS_INTRO = 0,
 	GS_INSTRUCTIONS_1,
 	GS_INSTRUCTIONS_2,
-	GS_PLAY,
-	GS_PLAYER_DEAD,
-	GS_WAIT,
-	//GS_PAUSE,
+	GS_PLAY, // Main status
+ 	GS_PLAYER_DEAD, // When player gets hits and dies
+	GS_WAIT, // Game waits while player revives; Game waits before going to the next level
+	//GS_PAUSE, // TODO
 	GS_HIGH_SCORES,
 	GS_GAME_OVER
 };
@@ -24,17 +22,17 @@ public:
 	static constexpr int DEF_WAIT_TIMER{ 30 };
 	static constexpr int DEF_LEVEL_MAX{ 10 };
 private:
-	static const int DEF_WINDOW_WIDTH{ 80 };
-	static const int DEF_WINDOW_HEIGHT{ 40 };
-	static const int DEF_WINDOW_WIDTH_PIXELS{ 526 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size in pixels, get the value in setConsoleWindowSize
-	static const int DEF_WINDOW_HEIGHT_PIXELS{ 614 };
+	static constexpr int DEF_WINDOW_WIDTH{ 80 };
+	static constexpr int DEF_WINDOW_HEIGHT{ 40 };
+	static constexpr int DEF_WINDOW_WIDTH_PIXELS{ 526 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size in pixels, get the value in setConsoleWindowSize
+	static constexpr int DEF_WINDOW_HEIGHT_PIXELS{ 614 };
 	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_INTRO }; // for now - TODO: Change to GS_INTRO
 	static constexpr int DEF_LEVEL{ 1 };
 protected:
 	Size windowSize;
 	Game_State currentState;
 	int level;
-	int waitTimer;
+	int waitTimer; // Timer to wait when player gets hit or game goes to next level
 public:
 	Game();
 
