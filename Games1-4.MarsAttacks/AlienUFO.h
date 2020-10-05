@@ -7,6 +7,8 @@ class AlienUFO : public MovingObject
 {
 public:
 	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
+	static constexpr int DEF_EXPLOSION_TIME{ 8 };
+	static const std::vector<std::string> DEF_SPRITE_EXPLOSION;
 private:
 	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
@@ -22,6 +24,9 @@ private:
 protected:
 	int appearTimer;
 	int points;
+	int explosionTimer;
+
+	bool exploding;
 public:
 	AlienUFO();
 	virtual ~AlienUFO() = default;
@@ -30,8 +35,14 @@ public:
 
 	// GET METHODS
 	inline int getPoints() const { return points; }
+	inline int getExplosionTimer() const { return explosionTimer; }
+
+	// SET METHODS
+	inline void setExplosionTimer(const int& explosion_timer) { explosionTimer = explosion_timer; }
+	inline void setExploding(const bool& exploding) { this->exploding = exploding; }
 
 	void putInPlay();
 	void move(const Game& game);
 	void reset();
+	void updateExplosion();
 };

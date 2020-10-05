@@ -191,6 +191,7 @@ void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::
 void updateUFO(const Game& game, Player& player, AlienUFO& ufo) {
     ufo.putInPlay();
     checkResolveUFOMissileCollision(player, ufo);
+    ufo.updateExplosion();
     ufo.move(game);
 }
 
@@ -517,7 +518,11 @@ void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo) {
     if (isCollision(player.getMissile().getPosition(), ufo.getPosition(), ufo.getSpriteSize())) {
         player.setScore(player.getScore() + ufo.getPoints());
         player.setMissile().reset();
-        ufo.reset();
+        ufo.setExploding(true);
+        ufo.setSprite(AlienUFO::DEF_SPRITE_EXPLOSION);
+        if (ufo.getExplosionTimer() == DEF_NOT_IN_PLAY) {
+            ufo.setExplosionTimer(AlienUFO::DEF_EXPLOSION_TIME);
+        }
     }
 }
 
