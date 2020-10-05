@@ -10,5 +10,4 @@ Error occurs in "void updateAlienSwarmMovement" in "move downwards" if. "move_ho
 
 _____TO REVIEW_____
 
-Alien_swarm start to high and then, they don't arrive to shields neither to player.
 Pause mode can be added
