@@ -83,7 +83,7 @@ void AlienSwarm::setPositionDiff(const int& dx, const int& dy) {
 }
 
 void AlienSwarm::resetMovementTimer() {
-	movementTimer = 1;//line * 2 + (5 * (static_cast<float>(numAliensLeft) / static_cast<float>(DEF_NUM_COLS * DEF_NUM_ROWS)));
+	movementTimer = line * 2 + (5 * (static_cast<float>(numAliensLeft) / static_cast<float>(DEF_NUM_COLS * DEF_NUM_ROWS)));
 }
 
 void AlienSwarm::getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const {

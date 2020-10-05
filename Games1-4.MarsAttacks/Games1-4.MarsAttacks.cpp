@@ -15,6 +15,7 @@ int main(void)
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
     AlienSwarm alien_swarm(game);
+    AlienUFO ufo;
 
     initializeCurses(true); // PDCurses
 
@@ -24,7 +25,7 @@ int main(void)
     clock_t last_time = clock();
 
     do {
-        input = handleInput(game, player, shields, alien_swarm);
+        input = handleInput(game, player, shields, alien_swarm, ufo);
         if (input != 'q') {
             clock_t current_time = clock();
             clock_t dt = current_time - last_time;
@@ -32,9 +33,9 @@ int main(void)
             if (dt > CLOCKS_PER_SEC / DEF_FPS) {
                 last_time = current_time;
 
-                updateGame(game, player, shields, alien_swarm);
+                updateGame(game, player, shields, alien_swarm, ufo);
                 clearScreen(); // PDCurses
-                drawGame(game, player, shields, alien_swarm);
+                drawGame(game, player, shields, alien_swarm, ufo);
                 refreshScreen(); // PDCurses
             }
         }
@@ -73,7 +74,7 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
 }
 
 
-int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
     int input = getChar();
     switch (input)
     {
@@ -116,7 +117,7 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
         }
         else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
             game.setCurrentState(Game_State::GS_INTRO);
-            resetGame(game, player, shields, alien_swarm);
+            resetGame(game, player, shields, alien_swarm, ufo);
         }
         break;
     default:
@@ -125,19 +126,19 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
     return input;
 }
 
-void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
+void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
     if (game.getCurrentState() == Game_State::GS_PLAY) {
         updateMissile(player, shields);
         updateAlienSwarm(game, player, alien_swarm, shields);
+        updateUFO(game, player, ufo);
         if (player.getIsShot()) {
             game.setCurrentState(Game_State::GS_PLAYER_DEAD);
             player.setIsShot(false);
         }
         if (alien_swarm.getNumAliensLeft() <= 0) {
-            //game.setLevel(game.getLevel() + 1);
             game.setLevel((game.getLevel() % Game::DEF_LEVEL_MAX) + 1);
             game.setCurrentState(Game_State::GS_WAIT);
-            resetLevel(game, player, shields, alien_swarm);
+            resetLevel(game, player, shields, alien_swarm, ufo);
         }
     } else if (game.getCurrentState() == Game_State::GS_WAIT) {
         game.setWaitTimer(game.getWaitTimer() - 1);
@@ -149,7 +150,7 @@ void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienS
     }
 }
 
-void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& alien_swarm) {
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& alien_swarm, const AlienUFO& ufo) {
     if (game.getCurrentState() == Game_State::GS_INTRO) {
         drawIntroScreen(game);
     }
@@ -161,6 +162,7 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
         drawShields(shields);
         drawAlienSwarm(alien_swarm);
         drawBombs(alien_swarm);
+        ufo.draw();
     }
     else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
         drawInstructionsScreen1(game);
@@ -175,8 +177,8 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
 
 
 void updateMissile(Player& player, std::vector<Shield>& shields) {
-    player.moveMissile();
     checkResolveShieldsMissileCollision(player, shields);
+    player.moveMissile();
 }
 
 void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
@@ -184,6 +186,12 @@ void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::
     updateAlienSwarmExplosions(alien_swarm);
     updateAlienSwarmMovementAndShieldCollision(game, alien_swarm, shields);
     updateAlienSwarmBombs(game, alien_swarm, shields, player);
+}
+
+void updateUFO(const Game& game, Player& player, AlienUFO& ufo) {
+    ufo.putInPlay();
+    checkResolveUFOMissileCollision(player, ufo);
+    ufo.move(game);
 }
 
 
@@ -259,18 +267,20 @@ void drawGameOverScreen(const Game& game) {
 }
 
 
-void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
+void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
     game.resetLevel();
     player.resetLevel();
     resetShields(game, player, shields);
     alien_swarm.reset(game);
+    ufo.reset();
 }
 
-void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
+void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
     game.resetAll();
     player.resetAll();
     resetShields(game, player, shields);
     alien_swarm.reset(game);
+    ufo.reset();
 }
 
 void resetShields(const Game& game, const Player& player, std::vector<Shield>& shields) {
@@ -502,6 +512,14 @@ void checkResolveShieldsBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, 
     }
 }
 
+
+void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo) {
+    if (isCollision(player.getMissile().getPosition(), ufo.getPosition(), ufo.getSpriteSize())) {
+        player.setScore(player.getScore() + ufo.getPoints());
+        player.setMissile().reset();
+        ufo.reset();
+    }
+}
 
 void drawShields(const std::vector<Shield>& shields) {
     for (const auto& shield : shields) {

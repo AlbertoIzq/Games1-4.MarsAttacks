@@ -148,6 +148,7 @@ vector of scores
 #include "Player.h"
 #include "Shield.h"
 #include "AlienSwarm.h"
+#include "AlienUFO.h"
 
 #include <iostream>
 #include <string>
@@ -161,20 +162,21 @@ using std::string;
 
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 
-int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm); // Returns int value due to Arrow keys
-void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
-void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens);
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo); // Returns int value due to Arrow keys
+void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens, const AlienUFO& ufo);
 
 void updateMissile(Player& player, std::vector<Shield>& shields);
 void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
+void updateUFO(const Game& game, Player& player, AlienUFO& ufo);
 
 void drawIntroScreen(const Game& game);
 void drawInstructionsScreen1(const Game& game);
 void drawInstructionsScreen2(const Game& game);
 void drawGameOverScreen(const Game& game);
 
-void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
-void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
+void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
+void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
 void resetShields(const Game& game, const Player& player, std::vector<Shield>& shields);
 
 void checkResolveShieldsMissileCollision(Player& player, std::vector<Shield>& shields);
@@ -196,6 +198,8 @@ void checkResolveShieldsBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, 
 void checkResolvePlayerBombCollision(AlienSwarm& alien_swarm, AlienBomb& bomb, Player& player);
 bool isCollision(const Position& projectile, const Position& object_position, const Size& object_size);
 
+void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo);
+
 void drawShields(const std::vector<Shield>& shields);
 void drawAlienSwarm(const AlienSwarm& alien_swarm);
 void drawBombs(const AlienSwarm& alien_swarm);
@@ -205,12 +209,6 @@ void drawGameStats(const Game& game, const Player& player);
 /// ////////////////////////////////////////////////////
 /// </summary>
 
-struct AlienUFO {
-	Position position;
-	//Size size;
-	int points; // from 50 to 200
-};
-
 struct Score {
 	int score;
 	string name;
@@ -219,9 +217,3 @@ struct Score {
 struct HighScoreTable {
 	std::vector<Score> scores;
 };
-
-/*
-TO DO LIST
-
--Check usage of constants in classes when are needed outside of the class => Change them to public static const?
-*/

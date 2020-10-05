@@ -144,6 +144,7 @@
     <ClCompile Include="Alien.cpp" />
     <ClCompile Include="AlienBomb.cpp" />
     <ClCompile Include="AlienSwarm.cpp" />
+    <ClCompile Include="AlienUFO.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Games1-4.MarsAttacks.cpp" />
     <ClCompile Include="Missile.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Alien.h" />
     <ClInclude Include="AlienBomb.h" />
     <ClInclude Include="AlienSwarm.h" />
+    <ClInclude Include="AlienUFO.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Games1-4.MarsAttacks.h" />
     <ClInclude Include="Missile.h" />
