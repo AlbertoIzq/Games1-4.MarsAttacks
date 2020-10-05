@@ -21,9 +21,9 @@ void Player::move(const Game& game, const bool& direction_right) {
 	else {
 		dx = -DEF_SPEED;
 	}
-	if (position.x + spriteSize.width + dx > game.getSize().width) // Make sure the player doesn't go off the screen to the right
+	if (position.x + spriteSize.width + dx > game.getWindowSize().width) // Make sure the player doesn't go off the screen to the right
 	{
-		position.x = game.getSize().width - spriteSize.width; // The most right position the player can be
+		position.x = game.getWindowSize().width - spriteSize.width; // The most right position the player can be
 	}
 	else if (position.x + dx < 0) // Make sure the player doesn't go off the screen to the left
 	{
@@ -32,13 +32,6 @@ void Player::move(const Game& game, const bool& direction_right) {
 	else {
 		position.x += dx;
 	}
-}
-
-void Player::resetPosition() {
-	position = DEF_INI_POSITION;
-	//animation = 0;
-	//missile =
-	//resetMissile
 }
 
 void Player::gotShot() {
@@ -76,4 +69,18 @@ void Player::moveMissile() {
 			missile.reset();
 		}
 	}
+}
+
+void Player::resetLevel() {
+	position = DEF_INI_POSITION;
+	sprite = DEF_SPRITE;
+	missile.reset();
+	isShootingMissile = false;
+	isShot = false;
+}
+
+void Player::resetAll() {
+	resetLevel();
+	lives = DEF_MAX_NUM_LIVES;
+	score = DEF_INI_SCORE;
 }

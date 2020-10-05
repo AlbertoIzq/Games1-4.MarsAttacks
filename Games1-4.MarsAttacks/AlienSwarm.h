@@ -14,8 +14,8 @@ private:
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
 	static const int DEF_INI_POSITION_X;
 	static const int DEF_INI_POSITION_Y;
-	static constexpr int DEF_NUM_ROWS{ 5 };
 	static constexpr int DEF_NUM_COLS{ 11 };
+	static constexpr int DEF_NUM_ROWS{ 5 };
 	static constexpr int DEF_NUM_ROWS_30P{ 1 };
 	static constexpr int DEF_NUM_ROWS_20P{ 2 };
 	static constexpr int DEF_NUM_ROWS_10P{ 2 };
@@ -63,4 +63,5 @@ public:
 	bool getAlienToShootBomb(Alien& alien); // Returns true if there is an alien available to shoot
 	void shootBomb(const Alien& alien);
 	void moveChangeAnimationBombs(const Game& game);
+	void reset(const Game& game);
 };

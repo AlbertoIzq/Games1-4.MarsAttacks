@@ -11,7 +11,7 @@ Missile::Missile()
 
 void Missile::draw() const {
 	if (position.x != DEF_NOT_IN_PLAY) {
-		drawSprite(position.x, position.y, sprite, spriteSize.height);
+		drawSprite(position.x, position.y, sprite);
 	}
 }
 

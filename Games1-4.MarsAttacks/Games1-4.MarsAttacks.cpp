@@ -11,7 +11,6 @@ int main(void)
 {
     srand(time(NULL));
 
-
     Game game;
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
@@ -25,7 +24,7 @@ int main(void)
     clock_t last_time = clock();
 
     do {
-        input = handleInput(game, player);
+        input = handleInput(game, player, shields, alien_swarm);
         if (input != 'q') {
             clock_t current_time = clock();
             clock_t dt = current_time - last_time;
@@ -54,8 +53,8 @@ int main(void)
 std::vector<Shield> iniShields(const Game& game, const Player& player) {
     std::vector<Shield> shields;
 
-    int game_width{ game.getSize().width };
-    int game_height{ game.getSize().height };
+    int game_width{ game.getWindowSize().width };
+    int game_height{ game.getWindowSize().height };
     int player_sprite_height{ player.getSpriteSize().height };
     Shield shield_properties;
     int shield_sprite_width{ shield_properties.getSpriteSize().width };
@@ -74,12 +73,20 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
 }
 
 
-int handleInput(Game& game, Player& player) {
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
     int input = getChar();
     switch (input)
     {
     case 'q':
         return input;
+    case 'i':
+        if (game.getCurrentState() == Game_State::GS_INTRO) {
+            game.setCurrentState(Game_State::GS_INSTRUCTIONS_1);
+        }
+        else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
+            game.setCurrentState(Game_State::GS_INSTRUCTIONS_2);
+        }
+        break;
     case AK_LEFT:
         if (game.getCurrentState() == Game_State::GS_PLAY) {
             player.move(game, false);
@@ -91,7 +98,12 @@ int handleInput(Game& game, Player& player) {
         }
         break;
     case ' ':
-        if (game.getCurrentState() == Game_State::GS_PLAY) {
+        if (game.getCurrentState() == Game_State::GS_INTRO ||
+        game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1 ||
+        game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
+            game.setCurrentState(Game_State::GS_PLAY);
+        }
+        else if (game.getCurrentState() == Game_State::GS_PLAY) {
             player.shootMissile();
         }
         else if (game.getCurrentState() == Game_State::GS_PLAYER_DEAD) {
@@ -102,7 +114,10 @@ int handleInput(Game& game, Player& player) {
                 game.setWaitTimer(Game::DEF_WAIT_TIMER);
             }
         }
-        
+        else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+            game.setCurrentState(Game_State::GS_INTRO);
+            resetGame(game, player, shields, alien_swarm);
+        }
         break;
     default:
         break;
@@ -118,6 +133,12 @@ void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienS
             game.setCurrentState(Game_State::GS_PLAYER_DEAD);
             player.setIsShot(false);
         }
+        if (alien_swarm.getNumAliensLeft() <= 0) {
+            //game.setLevel(game.getLevel() + 1);
+            game.setLevel((game.getLevel() % Game::DEF_LEVEL_MAX) + 1);
+            game.setCurrentState(Game_State::GS_WAIT);
+            resetLevel(game, player, shields, alien_swarm);
+        }
     } else if (game.getCurrentState() == Game_State::GS_WAIT) {
         game.setWaitTimer(game.getWaitTimer() - 1);
         player.changeDeadSprite();
@@ -126,17 +147,29 @@ void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienS
             player.setSprite(Player::DEF_SPRITE);
         }
     }
-    
 }
 
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& alien_swarm) {
-    if (game.getCurrentState() == Game_State::GS_PLAY || game.getCurrentState() == Game_State::GS_PLAYER_DEAD
+    if (game.getCurrentState() == Game_State::GS_INTRO) {
+        drawIntroScreen(game);
+    }
+    else if (game.getCurrentState() == Game_State::GS_PLAY || game.getCurrentState() == Game_State::GS_PLAYER_DEAD
     || game.getCurrentState() == Game_State::GS_WAIT) {
+        drawGameStats(game, player);
         player.draw();
         player.getMissile().draw();
         drawShields(shields);
         drawAlienSwarm(alien_swarm);
         drawBombs(alien_swarm);
+    }
+    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
+        drawInstructionsScreen1(game);
+    }
+    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
+        drawInstructionsScreen2(game);
+    }
+    else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+        drawGameOverScreen(game);
     }
 }
 
@@ -145,11 +178,104 @@ void updateMissile(Player& player, std::vector<Shield>& shields) {
     player.moveMissile();
     checkResolveShieldsMissileCollision(player, shields);
 }
-void updateAlienSwarm(const Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
+
+void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
     checkResolveAlienSwarmMissileCollision(player, alien_swarm);
     updateAlienSwarmExplosions(alien_swarm);
     updateAlienSwarmMovementAndShieldCollision(game, alien_swarm, shields);
     updateAlienSwarmBombs(game, alien_swarm, shields, player);
+}
+
+
+void drawIntroScreen(const Game& game) {
+    std::vector<std::string> header{ "Release date: 05/10/2020" ,
+                                     "Author: Alberto Izquierdo aka Albertroll",
+                                     "Copyright-All rights reserved" };
+    std::string line_1{ "Welcome to this stupid Text Invaders game!" };
+    std::string line_2{ "Press I key to go to instructions or Space bar to start" };
+    std::string line_bottom{ "Side note: Feel free to put some good arcade music on =)" };
+
+    const int y_pos = game.getWindowSize().height / 2;
+    const int y_pos_bottom = game.getWindowSize().height - 1;
+    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
+    const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+
+    drawSprite(0, 0, header);
+    drawString(x_pos_1, y_pos, line_1);
+    drawString(x_pos_2, y_pos + 2, line_2);
+    drawString(0, y_pos_bottom, line_bottom);
+}
+
+void drawInstructionsScreen1(const Game& game) {
+    std::string line_1{ "INSTRUCTIONS" };
+    std::string line_2{ "Who the hell wastes time reading the instructions" };
+    std::string line_3{ "when those bastards are awaiting to invade the Earth?" };
+    std::string line_bottom_1{ "Side note: Just kidding! Press I key to read the instructions" };
+    std::string line_bottom_2{ "           or press Space bar to start" };
+
+    const int y_pos = game.getWindowSize().height / 2;
+    const int y_pos_bottom = game.getWindowSize().height - 2;
+    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
+    const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+    const int x_pos_3 = (game.getWindowSize().width - line_3.size()) / 2;
+
+    drawString(x_pos_1, y_pos, line_1);
+    drawString(x_pos_2, y_pos + 1, line_2);
+    drawString(x_pos_3, y_pos + 2, line_3);
+
+    drawString(0, y_pos_bottom, line_bottom_1);
+    drawString(0, y_pos_bottom + 1, line_bottom_2);
+}
+
+void drawInstructionsScreen2(const Game& game) {
+    std::string line_1{ "INSTRUCTIONS" };
+    std::string line_2{ "Bla, bla, bla, bla, bla" };
+
+    const int y_pos = game.getWindowSize().height / 2;
+    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
+    const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+
+    drawString(x_pos_1, y_pos, line_1);
+    drawString(x_pos_2, y_pos + 1, line_2);
+}
+
+void drawGameOverScreen(const Game& game) {
+    std::string line_1{ "GAME OVER" };
+    std::string line_2{ "Some damned invaders have just killed you and conquered Earth!" };
+
+    std::string line_3{ "You have 2 options:" };
+    std::string line_4{ "- Press Q key to exit the game and go cry somewhere else" };
+    std::string line_5{ "- Press Space bar and take revenge by killing all those bastards!!" };
+
+    const int y_pos = game.getWindowSize().height / 2;
+    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
+    const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+
+    drawString(x_pos_1, y_pos, line_1);
+    drawString(x_pos_2, y_pos + 2, line_2);
+    drawString(x_pos_2, y_pos + 4, line_3);
+    drawString(x_pos_2, y_pos + 5, line_4);
+    drawString(x_pos_2, y_pos + 6, line_5);
+}
+
+
+void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
+    game.resetLevel();
+    player.resetLevel();
+    resetShields(game, player, shields);
+    alien_swarm.reset(game);
+}
+
+void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm) {
+    game.resetAll();
+    player.resetAll();
+    resetShields(game, player, shields);
+    alien_swarm.reset(game);
+}
+
+void resetShields(const Game& game, const Player& player, std::vector<Shield>& shields) {
+    shields.clear();
+    shields = iniShields(game, player);
 }
 
 
@@ -244,7 +370,7 @@ void updateAlienSwarmExplosions(AlienSwarm& alien_swarm) {
 }
 
 
-void updateAlienSwarmMovementAndShieldCollision(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
+void updateAlienSwarmMovementAndShieldCollision(Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields) {
     alien_swarm.setMovementTimer(alien_swarm.getMovementTimer() - 1);
 
     bool move_horizontal = 0 >= alien_swarm.getMovementTimer();
@@ -256,7 +382,7 @@ void updateAlienSwarmMovementAndShieldCollision(const Game& game, AlienSwarm& al
     alien_swarm.getAlienLeftRightBottom(alien_left, alien_right, alien_bottom);
 
     // Move downwards
-    if (((alien_right.getPosition().x + alien_right.getSpriteSize().width) >= game.getSize().width && alien_swarm.getDirectionRight()) ||
+    if (((alien_right.getPosition().x + alien_right.getSpriteSize().width) >= game.getWindowSize().width && alien_swarm.getDirectionRight()) ||
         (alien_left.getPosition().x <= 0 && !alien_swarm.getDirectionRight()) && move_horizontal && alien_swarm.getLine() > 0) {
         move_horizontal = false;
         alien_swarm.setPositionDiff(0, 1);
@@ -264,6 +390,10 @@ void updateAlienSwarmMovementAndShieldCollision(const Game& game, AlienSwarm& al
         alien_swarm.setDirectionRight(!alien_swarm.getDirectionRight());
         alien_swarm.resetMovementTimer();
         checkResolveAlienSwarmShieldsCollision(alien_swarm, shields);
+
+        if (alien_swarm.getLine() <= 0) {
+            game.setCurrentState(Game_State::GS_GAME_OVER);
+        }
     }
 
     // Move horizontally
@@ -392,4 +522,22 @@ void drawBombs(const AlienSwarm& alien_swarm) {
     for (auto& bomb : alien_swarm.getBombs()) {
         bomb.draw();
     }
+}
+
+void drawGameStats(const Game& game, const Player& player) {
+    std::string line_score{ "Score: " };
+    std::string line_level{ "LEVEL " };
+    std::string line_lives{ "Lives: " };
+
+    line_score += std::to_string(player.getScore());
+    line_level += std::to_string(game.getLevel());
+    line_lives += std::to_string(player.getLives());
+
+    const int x_pos_score = 0;
+    const int x_pos_level = (game.getWindowSize().width - line_level.size()) / 2;
+    const int x_pos_lives = game.getWindowSize().width - line_lives.size();
+
+    drawString(x_pos_score, 0, line_score);
+    drawString(x_pos_level, 0, line_level);
+    drawString(x_pos_lives, 0, line_lives);
 }

@@ -5,5 +5,5 @@ StaticObject::StaticObject(Position position_val, Size size_val, std::vector<std
 }
 
 void StaticObject::draw() const {
-	drawSprite(position.x, position.y, sprite, spriteSize.height);
+	drawSprite(position.x, position.y, sprite);
 }

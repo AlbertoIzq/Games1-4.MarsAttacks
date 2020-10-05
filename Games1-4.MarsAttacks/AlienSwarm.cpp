@@ -20,7 +20,6 @@ AlienSwarm::AlienSwarm(const Game& game)
 			alien.setAlienType(Alien_Type::AT_30P);
 			alien.setSprite(Alien::DEF_SPRITE_30P_1);
 			alien_30P.push_back(alien);
-			numAliensLeft++;
 		}
 		aliens.push_back(alien_30P);
 	}
@@ -35,7 +34,6 @@ AlienSwarm::AlienSwarm(const Game& game)
 			alien.setAlienType(Alien_Type::AT_20P);
 			alien.setSprite(Alien::DEF_SPRITE_20P_1);
 			alien_20P.push_back(alien);
-			numAliensLeft++;
 		}
 		aliens.push_back(alien_20P);
 	}
@@ -50,11 +48,11 @@ AlienSwarm::AlienSwarm(const Game& game)
 			alien.setAlienType(Alien_Type::AT_10P);
 			alien.setSprite(Alien::DEF_SPRITE_10P_1);
 			alien_10P.push_back(alien);
-			numAliensLeft++;
 		}
 		aliens.push_back(alien_10P);
 	}
 
+	numAliensLeft = DEF_NUM_COLS * DEF_NUM_ROWS;
 	resetMovementTimer();
 	line = DEF_NUM_COLS - game.getLevel() - 1;
 
@@ -185,10 +183,24 @@ void AlienSwarm::moveChangeAnimationBombs(const Game& game) {
 			else {
 				isShootingBomb = false;
 			}
-			if (bomb.getPosition().y >= game.getSize().height) {
+			if (bomb.getPosition().y >= game.getWindowSize().height) {
 				bomb.reset();
 				numBombsInPlay--;
 			}
 		}
 	}
+}
+
+void AlienSwarm::reset(const Game& game) {
+	AlienSwarm alien_swarm_new(game);
+
+	position = alien_swarm_new.position;
+	aliens = alien_swarm_new.aliens;
+	numAliensLeft = alien_swarm_new.numAliensLeft;
+	directionRight = alien_swarm_new.directionRight;
+	movementTimer = alien_swarm_new.movementTimer;
+	line = alien_swarm_new.line;
+	bombs = alien_swarm_new.bombs;
+	numBombsInPlay = alien_swarm_new.numBombsInPlay;
+	isShootingBomb = alien_swarm_new.isShootingBomb;
 }

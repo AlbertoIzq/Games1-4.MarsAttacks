@@ -71,6 +71,6 @@ void Alien::updateExplosion() {
 
 void Alien::draw() const {
 	if (alienState != Alien_State::AS_DEAD) {
-		drawSprite(position.x, position.y, sprite, spriteSize.height);
+		drawSprite(position.x, position.y, sprite);
 	}
 }

@@ -161,12 +161,21 @@ using std::string;
 
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 
-int handleInput(Game& game, Player& player); // Returns int value due to Arrow keys
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm); // Returns int value due to Arrow keys
 void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens);
 
 void updateMissile(Player& player, std::vector<Shield>& shields);
-void updateAlienSwarm(const Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
+void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
+
+void drawIntroScreen(const Game& game);
+void drawInstructionsScreen1(const Game& game);
+void drawInstructionsScreen2(const Game& game);
+void drawGameOverScreen(const Game& game);
+
+void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
+void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm);
+void resetShields(const Game& game, const Player& player, std::vector<Shield>& shields);
 
 void checkResolveShieldsMissileCollision(Player& player, std::vector<Shield>& shields);
 bool isShieldCollision(const Position& projectile, const Shield& shield, Position& shield_collision_point); // Return true if collision and return shield collision point
@@ -178,7 +187,7 @@ void resolveAlienMissileCollision(Player& player, Alien& alien); // Alien starts
 
 void updateAlienSwarmExplosions(AlienSwarm& alien_swarm);
 
-void updateAlienSwarmMovementAndShieldCollision(const Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
+void updateAlienSwarmMovementAndShieldCollision(Game& game, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
 void checkResolveAlienSwarmShieldsCollision(const AlienSwarm& alien_swarm, std::vector<Shield>& shields);
 void collideShieldsWithAlien(std::vector<Shield>& shields, Alien& alien);
 
@@ -190,6 +199,7 @@ bool isCollision(const Position& projectile, const Position& object_position, co
 void drawShields(const std::vector<Shield>& shields);
 void drawAlienSwarm(const AlienSwarm& alien_swarm);
 void drawBombs(const AlienSwarm& alien_swarm);
+void drawGameStats(const Game& game, const Player& player);
 
 /// <summary>
 /// ////////////////////////////////////////////////////

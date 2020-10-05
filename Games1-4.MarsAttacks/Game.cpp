@@ -16,3 +16,12 @@ void Game::setConsoleWindowSize() {
     // MoveWindow(window_handle, x, y, width, height, redraw_window);
     MoveWindow(console, r.left, r.top, DEF_WINDOW_WIDTH_PIXELS, DEF_WINDOW_HEIGHT_PIXELS, TRUE);
 }
+
+void Game::resetLevel() {
+    waitTimer = DEF_WAIT_TIMER;
+}
+
+void Game::resetAll() {
+    resetLevel();
+    level = DEF_LEVEL;
+}

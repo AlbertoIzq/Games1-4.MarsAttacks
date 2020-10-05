@@ -22,6 +22,7 @@ void refreshScreen() {
 	refresh();
 }
 
+
 int screenWidth() {
 	return COLS;
 }
@@ -34,17 +35,22 @@ int getChar() {
 	return getch();
 }
 
-void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character) {
-	mvaddch(y_pos, x_pos, a_character);
-}
-
 void moveCursor(const int& x_pos, const int& y_pos) {
 	move(y_pos, x_pos);
 }
 
-void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite, const int& sprite_height) {
-	for (int h = 0; h < sprite_height; h++)
+
+void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character) {
+	mvaddch(y_pos, x_pos, a_character);
+}
+
+void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite) {
+	for (int h = 0; h < sprite.size(); h++)
 	{
 		mvprintw(y_pos + h, x_pos, "%s", sprite.at(h).c_str());
 	}
+}
+
+void drawString(const int& x_pos, const int& y_pos, std::string& string_text) {
+	mvprintw(y_pos, x_pos, "%s", string_text.c_str());
 }

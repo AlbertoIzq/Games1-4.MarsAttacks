@@ -41,15 +41,17 @@ public:
 
 	// SET METHODS
 	inline Missile& setMissile() { return missile; }
-	inline void setLives(const int& lives) { this->lives = lives; };
-	inline void setScore(const int& score) { this->score = score; };
+	inline void setLives(const int& lives) { this->lives = lives; }
+	inline void setScore(const int& score) { this->score = score; }
 	inline void setIsShot(const bool& is_shot) { isShot = is_shot; }
 
 	void move(const Game& game, const bool& direction_right);
-	void resetPosition();
 	void gotShot();
 	void changeDeadSprite();
 
 	void shootMissile();
 	void moveMissile();
+
+	void resetLevel();
+	void resetAll();
 };
