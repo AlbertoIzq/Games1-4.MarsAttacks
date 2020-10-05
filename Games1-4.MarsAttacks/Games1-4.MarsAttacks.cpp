@@ -60,13 +60,13 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
     int shield_sprite_width{ shield_properties.getSpriteSize().width };
     int shield_sprite_height{ shield_properties.getSpriteSize().height };
 
-    int first_padding = ceil(static_cast<float>(game_width - DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(DEF_NUM_SHIELDS + 1));
-    int x_padding = floor(static_cast<float>(game_width - DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(DEF_NUM_SHIELDS + 1));
+    int first_padding = ceil(static_cast<float>(game_width - Shield::DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(Shield::DEF_NUM_SHIELDS + 1));
+    int x_padding = floor(static_cast<float>(game_width - Shield::DEF_NUM_SHIELDS * shield_sprite_width) / static_cast<float>(Shield::DEF_NUM_SHIELDS + 1));
 
-    for (size_t i{ 0 }; i < DEF_NUM_SHIELDS; i++)
+    for (size_t i{ 0 }; i < Shield::DEF_NUM_SHIELDS; i++)
     {
         Shield shield;
-        shield.setPosition(first_padding + i * (shield_sprite_width + x_padding), game_height - 1 - player_sprite_height - shield_sprite_height - DEF_INI_POSITION_SHIELD_Y_OFFSET_DOWN);
+        shield.setPosition(first_padding + i * (shield_sprite_width + x_padding), game_height - 1 - player_sprite_height - shield_sprite_height - Shield::DEF_POSITION_Y_OFFSET_DOWN_PLAYER);
         shields.push_back(shield);
     }
     return shields;

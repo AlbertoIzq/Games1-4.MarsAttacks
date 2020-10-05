@@ -4,6 +4,7 @@
 #include "Alien.h"
 #include "AlienBomb.h"
 #include "Shield.h"
+#include "Player.h"
 #include "Other.h" // Needed for Position, Size and PDCursesUtils
 
 #include <vector>

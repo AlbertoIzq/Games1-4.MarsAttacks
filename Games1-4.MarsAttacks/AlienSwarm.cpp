@@ -1,19 +1,9 @@
 #include "AlienSwarm.h"
 
 // Initialization of class structs default values (They cannot be initialized in .h)
-/*INITIAL Y POSITION
-Game.height 
-- 1 <= Player under space
-- 3 <= Player height
-- 1 <= Space between player and shields
-- 3 <= Shield height
-- (alien.height * num_rows + padding_y * (nums_rows - 1))
-*/
 const int AlienSwarm::DEF_INI_POSITION_X = (Game::DEF_WINDOW_SIZE.width - DEF_NUM_COLS * (Alien::DEF_SPRITE_WIDTH + DEF_PADDING_X)) / 2;
-const int AlienSwarm::DEF_INI_POSITION_Y = Game::DEF_WINDOW_SIZE.height - 1 - 3 - 1 - 3 - (DEF_NUM_ROWS * Alien::DEF_SPRITE_HEIGHT + (DEF_NUM_COLS - 1) * DEF_PADDING_Y);
+const int AlienSwarm::DEF_INI_POSITION_Y = Game::DEF_WINDOW_SIZE.height - Player::DEF_POSITION_Y_OFFSET_DOWN - Player::DEF_SPRITE_SIZE.height - Shield::DEF_POSITION_Y_OFFSET_DOWN_PLAYER - Shield::DEF_SPRITE_SIZE.height - (DEF_NUM_ROWS * Alien::DEF_SPRITE_HEIGHT + (DEF_NUM_COLS - 1) * DEF_PADDING_Y);
 const Position AlienSwarm::DEF_INI_POSITION{ DEF_INI_POSITION_X , DEF_INI_POSITION_Y };
-
-//aliens.position.y = game.windowSize.height - NUM_ALIEN_COLUMNS - NUM_ALIEN_ROWS * aliens.spriteSize.height - ALIENS_Y_PADDING *( NUM_ALIEN_ROWS-1) - 3 + game.level;
 
 AlienSwarm::AlienSwarm(const Game& game)
 	: position{ DEF_INI_POSITION }, numAliensLeft{ 0 }, directionRight{ true }, isShootingBomb{ false }, numBombsInPlay{ 0 } {
@@ -93,7 +83,7 @@ void AlienSwarm::setPositionDiff(const int& dx, const int& dy) {
 }
 
 void AlienSwarm::resetMovementTimer() {
-	movementTimer = line * 2 + (5 * (static_cast<float>(numAliensLeft) / static_cast<float>(DEF_NUM_COLS * DEF_NUM_ROWS)));
+	movementTimer = 1;//line * 2 + (5 * (static_cast<float>(numAliensLeft) / static_cast<float>(DEF_NUM_COLS * DEF_NUM_ROWS)));
 }
 
 void AlienSwarm::getAlienLeftRightBottom(Alien& alien_left, Alien& alien_right, Alien& alien_bottom) const {

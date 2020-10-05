@@ -13,9 +13,7 @@
 
 enum {
 	DEF_FPS = 30,
-	DEF_NUM_SHIELDS = 4,
 	DEF_NOT_IN_PLAY = -1,
-	DEF_INI_POSITION_SHIELD_Y_OFFSET_DOWN = 2,
 };
 
 struct Position {

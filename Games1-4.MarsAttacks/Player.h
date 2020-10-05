@@ -2,20 +2,22 @@
 
 #include "MovingObject.h"
 
-#include "Missile.h"
 #include "Game.h"
+#include "Missile.h"
 
 class Player : public MovingObject
 {
 public:
+	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
 	static const std::vector<std::string> DEF_SPRITE; // Initialized in .cpp
 	static const std::vector<std::string> DEF_SPRITE_DEAD_1; // Initialized in .cpp
 	static const std::vector<std::string> DEF_SPRITE_DEAD_2; // Initialized in .cpp
+	static const int DEF_POSITION_Y_OFFSET_DOWN{ 1 };
 private:
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
 	static const int DEF_INI_POSITION_X;
 	static const int DEF_INI_POSITION_Y;
-	static const Size DEF_SPRITE_SIZE; // Initialized in .cpp
+	
 	static constexpr int DEF_SPRITE_WIDTH{ 5 };
 	static constexpr int DEF_SPRITE_HEIGHT{ 2 };
 	static constexpr int DEF_SPEED{ 1 };
