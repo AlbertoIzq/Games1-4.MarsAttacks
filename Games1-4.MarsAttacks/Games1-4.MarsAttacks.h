@@ -166,6 +166,13 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
 void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens, const AlienUFO& ufo);
 
+void handleInputI(Game& game);
+void handleInputLeft(Game& game, Player& player);
+void handleInputRight(Game& game, Player& player);
+void handleInputUp(Game& game);
+void handleInputDown(Game& game);
+void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
+
 void updateMissile(Player& player, std::vector<Shield>& shields);
 void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
 void updateUFO(const Game& game, Player& player, AlienUFO& ufo);

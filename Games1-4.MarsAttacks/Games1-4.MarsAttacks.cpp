@@ -79,60 +79,22 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
     case 'e':
         return input;
     case 'i':
-        if (game.getCurrentState() == Game_State::GS_INTRO) {
-            game.setCurrentState(Game_State::GS_INSTRUCTIONS_1);
-        }
-        else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
-            game.setCurrentState(Game_State::GS_INSTRUCTIONS_2);
-        }
+        handleInputI(game);
         break;
     case AK_LEFT:
-        if (game.getCurrentState() == Game_State::GS_PLAY) {
-            player.move(game, false);
-        }
-        else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-            game.moveNameLetterLeft();
-        }
+        handleInputLeft(game, player);
         break;
     case AK_RIGHT:
-        if (game.getCurrentState() == Game_State::GS_PLAY) {
-            player.move(game, true);
-        }
-        else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-            game.moveNameLetterRight();
-        }
+        handleInputRight(game, player);
         break;
     case AK_UP:
-        if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-            game.moveNameLetterUp();
-        }
+        handleInputUp(game);
         break;
     case AK_DOWN:
-        if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-            game.moveNameLetterDown();
-        }
+        handleInputDown(game);
         break;
     case ' ':
-        if (game.getCurrentState() == Game_State::GS_INTRO ||
-        game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1 ||
-        game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
-            game.setCurrentState(Game_State::GS_PLAY);
-        }
-        else if (game.getCurrentState() == Game_State::GS_PLAY) {
-            player.shootMissile();
-        }
-        else if (game.getCurrentState() == Game_State::GS_PLAYER_DEAD) {
-            if (player.getLives() <= 0) {
-                game.setCurrentState(Game_State::GS_GAME_OVER);
-            } else {
-                game.setCurrentState(Game_State::GS_WAIT);
-                game.setWaitTimer(Game::DEF_WAIT_TIMER);
-            }
-        }
-        else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-            game.setCurrentState(Game_State::GS_INTRO);
-            resetGame(game, player, shields, alien_swarm, ufo);
-        }
+        handleInputSpace(game, player, shields, alien_swarm, ufo);
         break;
     default:
         break;
@@ -188,6 +150,70 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
     }
     else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
         drawGameOverScreen(game);
+    }
+}
+
+
+void handleInputI(Game& game) {
+    if (game.getCurrentState() == Game_State::GS_INTRO) {
+        game.setCurrentState(Game_State::GS_INSTRUCTIONS_1);
+    }
+    else if (game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1) {
+        game.setCurrentState(Game_State::GS_INSTRUCTIONS_2);
+    }
+}
+
+void handleInputLeft(Game& game, Player& player) {
+    if (game.getCurrentState() == Game_State::GS_PLAY) {
+        player.move(game, false);
+    }
+    else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+        game.moveNameLetterLeft();
+    }
+}
+
+void handleInputRight(Game& game, Player& player) {
+    if (game.getCurrentState() == Game_State::GS_PLAY) {
+        player.move(game, true);
+    }
+    else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+        game.moveNameLetterRight();
+    }
+}
+
+void handleInputUp(Game& game) {
+    if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+        game.moveNameLetterUp();
+    }
+}
+
+void handleInputDown(Game& game) {
+    if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+        game.moveNameLetterDown();
+    }
+}
+
+void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
+    if (game.getCurrentState() == Game_State::GS_INTRO ||
+        game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1 ||
+        game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
+        game.setCurrentState(Game_State::GS_PLAY);
+    }
+    else if (game.getCurrentState() == Game_State::GS_PLAY) {
+        player.shootMissile();
+    }
+    else if (game.getCurrentState() == Game_State::GS_PLAYER_DEAD) {
+        if (player.getLives() <= 0) {
+            game.setCurrentState(Game_State::GS_GAME_OVER);
+        }
+        else {
+            game.setCurrentState(Game_State::GS_WAIT);
+            game.setWaitTimer(Game::DEF_WAIT_TIMER);
+        }
+    }
+    else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+        game.setCurrentState(Game_State::GS_INTRO);
+        resetGame(game, player, shields, alien_swarm, ufo);
     }
 }
 
