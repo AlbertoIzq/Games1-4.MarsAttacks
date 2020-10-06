@@ -149,6 +149,7 @@
     <ClCompile Include="Games1-4.MarsAttacks.cpp" />
     <ClCompile Include="Missile.cpp" />
     <ClCompile Include="MovingObject.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="StaticObject.cpp" />
     <ClCompile Include="PDCursesUtils.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Games1-4.MarsAttacks.h" />
     <ClInclude Include="Missile.h" />
     <ClInclude Include="MovingObject.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="StaticObject.h" />
     <ClInclude Include="Other.h" />
     <ClInclude Include="PDCursesUtils.h" />

@@ -4,6 +4,7 @@
 #include <ctime> // To control Frames Per Second (FPS)
 #include <cmath> // For computing shields padding
 #include <vector>
+#include <algorithm> // To sort high scores table
 
 int main(void)
 {
@@ -14,6 +15,7 @@ int main(void)
     std::vector<Shield> shields = iniShields(game, player);
     AlienSwarm alien_swarm(game);
     AlienUFO ufo;
+    std::vector<Score> high_score_table;
 
     initializeCurses(true); // PDCurses
 
@@ -23,7 +25,7 @@ int main(void)
     clock_t last_time = clock();
 
     do {
-        input = handleInput(game, player, shields, alien_swarm, ufo);
+        input = handleInput(game, player, shields, alien_swarm, ufo, high_score_table);
         if (input != 'e') {
             clock_t current_time = clock();
             clock_t dt = current_time - last_time;
@@ -33,7 +35,7 @@ int main(void)
 
                 updateGame(game, player, shields, alien_swarm, ufo);
                 clearScreen(); // PDCurses
-                drawGame(game, player, shields, alien_swarm, ufo);
+                drawGame(game, player, shields, alien_swarm, ufo, high_score_table);
                 refreshScreen(); // PDCurses
             }
         }
@@ -72,7 +74,7 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
 }
 
 
-int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table) {
     int input = getChar();
     switch (input)
     {
@@ -94,7 +96,7 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
         handleInputDown(game);
         break;
     case ' ':
-        handleInputSpace(game, player, shields, alien_swarm, ufo);
+        handleInputSpace(game, player, shields, alien_swarm, ufo, high_score_table);
         break;
     default:
         break;
@@ -128,7 +130,7 @@ void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienS
     }
 }
 
-void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& alien_swarm, const AlienUFO& ufo) {
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& alien_swarm, const AlienUFO& ufo, const std::vector<Score>& high_score_table) {
     if (game.getCurrentState() == Game_State::GS_INTRO) {
         drawIntroScreen(game);
     }
@@ -150,6 +152,9 @@ void drawGame(const Game& game, const Player& player, const std::vector<Shield>&
     }
     else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
         drawGameOverScreen(game);
+    }
+    else if (game.getCurrentState() == Game_State::GS_HIGH_SCORES) {
+        drawHighScoresScreen(game, high_score_table);
     }
 }
 
@@ -193,7 +198,7 @@ void handleInputDown(Game& game) {
     }
 }
 
-void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo) {
+void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table) {
     if (game.getCurrentState() == Game_State::GS_INTRO ||
         game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1 ||
         game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
@@ -212,8 +217,12 @@ void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, 
         }
     }
     else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-        game.setCurrentState(Game_State::GS_INTRO);
+        addScore(high_score_table, game.getPlayerName(), player.getScore());
+        game.setCurrentState(Game_State::GS_HIGH_SCORES);
+    }
+    else if (game.getCurrentState() == Game_State::GS_HIGH_SCORES) {
         resetGame(game, player, shields, alien_swarm, ufo);
+        game.setCurrentState(Game_State::GS_INTRO);
     }
 }
 
@@ -239,62 +248,99 @@ void updateUFO(const Game& game, Player& player, AlienUFO& ufo) {
 
 
 void drawIntroScreen(const Game& game) {
-    std::vector<std::string> header{ "Release date: 05/10/2020" ,
+    std::vector<std::string> header{ "Release date: 07/10/2020" ,
                                      "Author: Alberto Izquierdo aka Albertroll",
-                                     "Copyright-All rights reserved" };
-    std::string line_1{ "Welcome to this stupid Text Invaders game!" };
+                                     "Copyright-All lefts reserved" };
+    drawSprite(0, 0, header);
+
+    std::string line_1{ "Welcome to this stupid TEXT INVADERS game!" };
     std::string line_2{ "Press I key to go to instructions or Space bar to start" };
-    std::string line_bottom{ "Side note: Feel free to put some good arcade music on =)" };
 
     const int y_pos = game.getWindowSize().height / 2;
-    const int y_pos_bottom = game.getWindowSize().height - 1;
     const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
     const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
 
-    drawSprite(0, 0, header);
     drawString(x_pos_1, y_pos, line_1);
     drawString(x_pos_2, y_pos + 2, line_2);
+    
+    std::string line_bottom{ "Side note: Feel free to put some good arcade music on =)" };
+    const int y_pos_bottom = game.getWindowSize().height - 1;
     drawString(0, y_pos_bottom, line_bottom);
 }
 
 void drawInstructionsScreen1(const Game& game) {
-    std::string line_1{ "INSTRUCTIONS" };
-    std::string line_2{ "Who the hell wastes time reading the instructions" };
-    std::string line_3{ "when those bastards are awaiting to invade the Earth?" };
-    std::string line_bottom_1{ "Side note: Just kidding! Press I key to read the instructions" };
-    std::string line_bottom_2{ "           or press Space bar to start" };
+    std::string line_header{ "INSTRUCTIONS" };
+    const int x_pos_header = (game.getWindowSize().width - line_header.size()) / 2;
+    drawString(x_pos_header, 2, line_header);
 
-    const int y_pos = game.getWindowSize().height / 2;
-    const int y_pos_bottom = game.getWindowSize().height - 2;
+    std::string line_1{ "Who the hell wastes time reading the instructions" };
+    std::string line_2{ "when those bastards are awaiting to invade the Earth?" };
+    
     const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
     const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+
+    drawString(x_pos_1, 4, line_1);
+    drawString(x_pos_2, 5, line_2);
+
+    std::string line_3{ "Stop wasting time and press Space bar to start the bloodbath" };
     const int x_pos_3 = (game.getWindowSize().width - line_3.size()) / 2;
+    drawString(x_pos_3, 7, line_3);
 
-    drawString(x_pos_1, y_pos, line_1);
-    drawString(x_pos_2, y_pos + 1, line_2);
-    drawString(x_pos_3, y_pos + 2, line_3);
-
+    std::string line_bottom_1{ "Side note: Just kidding! Press I key to read the damned instructions" };
+    const int y_pos_bottom = game.getWindowSize().height - 1;
     drawString(0, y_pos_bottom, line_bottom_1);
-    drawString(0, y_pos_bottom + 1, line_bottom_2);
 }
 
 void drawInstructionsScreen2(const Game& game) {
-    std::string line_1{ "INSTRUCTIONS" };
-    std::string line_2{ "Bla, bla, bla, bla, bla" };
+    std::string line_header_1{ "INSTRUCTIONS" };
+    const int x_pos_header_1 = (game.getWindowSize().width - line_header_1.size()) / 2;
+    drawString(x_pos_header_1, 2, line_header_1);
 
-    const int y_pos = game.getWindowSize().height / 2;
-    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
-    const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+    std::vector<string> instructions_1{
+        {"- The aim of the game is to shoot the invaders with your missile while "},
+        {"avoiding their shots and preventing an invasion. "},
+        {"- Amassing a high score is a further objective and one that must be "},
+        {"prioritised against your continued survival."},
+        {"- There is no time limit, except for the fact that if you do not shoot "},
+        {"them all before they reach the bottom of the screen the game ends."}
+    };
 
-    drawString(x_pos_1, y_pos, line_1);
-    drawString(x_pos_2, y_pos + 1, line_2);
+    const int y_pos_1 = 4;
+    const int x_pos = 1;
+
+    for (int i{ 0 }; i < instructions_1.size(); i++) {
+        drawString(x_pos, y_pos_1 + i, instructions_1.at(i));
+    }
+
+    std::string line_header_2{ "CONTROLS" };
+    const int y_pos_header_2 = y_pos_1 + instructions_1.size() + 1;
+    const int x_pos_header_2 = (game.getWindowSize().width - line_header_2.size()) / 2;
+    drawString(x_pos_header_2, y_pos_header_2, line_header_2);
+    
+    std::vector<string> instructions_2{
+        {"- Space bar => To shoot those bastards "},
+        {"- Left arrow key => Move to the left"},
+        {"- Right arrow key => Move to the right"},
+        {"- E key => Exit the game"}
+    };
+    
+    const int y_pos_2 = y_pos_header_2 + 2;
+
+    for (int i{ 0 }; i < instructions_2.size(); i++) {
+        drawString(x_pos, y_pos_2 + i, instructions_2.at(i));
+    }
+    
+    std::string line_bottom{ "Stop wasting time and press Space bar to start the bloodbath" };
+    const int x_pos_bottom = (game.getWindowSize().width - line_bottom.size()) / 2;
+    const int y_pos_bottom = y_pos_2 + instructions_2.size() + 4;
+    drawString(x_pos_bottom, y_pos_bottom, line_bottom);
 }
 
 void drawGameOverScreen(const Game& game) {
     std::string line_game_over_1{ "GAME OVER" };
-    std::string line_game_over_2{ "Some damned invaders have just killed you and conquered Earth!" };
+    std::string line_game_over_2{ "Some damned invaders have just killed you and conquered Earth" };
 
-    const int y_pos_game_over_1 = game.getWindowSize().height / 3;
+    const int y_pos_game_over_1 = game.getWindowSize().height * 1 / 4;
     const int x_pos_game_over_1 = (game.getWindowSize().width - line_game_over_1.size()) / 2;
     const int x_pos_game_over_2 = (game.getWindowSize().width - line_game_over_2.size()) / 2;
 
@@ -303,22 +349,94 @@ void drawGameOverScreen(const Game& game) {
 
     std::string line_name_1{ "Please enter your shitty name:" };
 
+    const int y_pos_name_1 = game.getWindowSize().height / 2;
     const int x_pos_name_1 = (game.getWindowSize().width - line_name_1.size()) / 2;
-    const int x_pos_name_2 = (game.getWindowSize().width - DEF_MAX_CHAR_NAME_SCORE) / 2;
+    const int x_pos_name_2 = (game.getWindowSize().width - Score::DEF_MAX_CHAR_NAME_SCORE) / 2;
 
-    drawString(x_pos_name_1, y_pos_game_over_1 + 5, line_name_1);
-    game.drawPlayerName(x_pos_name_2, y_pos_game_over_1 + 6);
+    drawString(x_pos_name_1, y_pos_name_1, line_name_1);
+    game.drawPlayerName(x_pos_name_2, y_pos_name_1 + 1);
+
+    std::string line_1{ "Press Space bar to check how well you scored among previous fuckers" };
+    const int x_pos_line_1 = (game.getWindowSize().width - line_1.size()) / 2;
+    drawString(x_pos_line_1, y_pos_name_1 + 3, line_1);
+}
+
+void drawHighScoresScreen(const Game& game, const std::vector<Score>& high_score_table) {
+    std::string line_1{ "HIGH SCORES" };
+    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
+    drawString(x_pos_1, 2, line_1);
+
+    int y_pos_end_table{ 0 };
+    drawHighScoreTable(game, high_score_table, 4, y_pos_end_table);
 
     std::string line_op_1{ "You have 2 options:" };
     std::string line_op_2{ "- Press E key to exit the game and go cry somewhere else" };
     std::string line_op_3{ "- Press Space bar to take revenge by killing all those bastards!!" };
-    
-    const int y_pos_op_1 = game.getWindowSize().height *2 / 3;
+
+    const int y_pos_op_1 = y_pos_end_table + 3;
     const int x_pos_op_1 = (game.getWindowSize().width - line_op_3.size()) / 2;
 
-    drawString(x_pos_game_over_2, y_pos_op_1, line_op_1);
-    drawString(x_pos_game_over_2, y_pos_op_1 + 1, line_op_2);
-    drawString(x_pos_game_over_2, y_pos_op_1 + 2, line_op_3); 
+    drawString(x_pos_op_1, y_pos_op_1, line_op_1);
+    drawString(x_pos_op_1, y_pos_op_1 + 1, line_op_2);
+    drawString(x_pos_op_1, y_pos_op_1 + 2, line_op_3);
+}
+
+
+void drawShields(const std::vector<Shield>& shields) {
+    for (const auto& shield : shields) {
+        shield.draw();
+    }
+}
+
+void drawAlienSwarm(const AlienSwarm& alien_swarm) {
+    for (auto& alien_row : alien_swarm.getAliens()) {
+        for (auto& alien : alien_row) {
+            alien.setSpriteDependingOnState();
+            alien.draw();
+        }
+    }
+}
+
+void drawBombs(const AlienSwarm& alien_swarm) {
+    for (auto& bomb : alien_swarm.getBombs()) {
+        bomb.draw();
+    }
+}
+
+void drawGameStats(const Game& game, const Player& player) {
+    std::string line_score{ "Score: " };
+    std::string line_level{ "LEVEL " };
+    std::string line_lives{ "Lives: " };
+
+    line_score += std::to_string(player.getScore());
+    line_level += std::to_string(game.getLevel());
+    line_lives += std::to_string(player.getLives());
+
+    const int x_pos_score = 0;
+    const int x_pos_level = (game.getWindowSize().width - line_level.size()) / 2;
+    const int x_pos_lives = game.getWindowSize().width - line_lives.size();
+
+    drawString(x_pos_score, 0, line_score);
+    drawString(x_pos_level, 0, line_level);
+    drawString(x_pos_lives, 0, line_lives);
+}
+
+void drawHighScoreTable(const Game& game, const std::vector<Score>& high_score_table, const int& y_pos, int& y_pos_end) {
+    const int y_padding{ 2 };
+    const int x_padding{ 20 };
+    const int score_max_digits{ 4 };
+    const int x_pos_name = (game.getWindowSize().width - Score::DEF_MAX_CHAR_NAME_SCORE - score_max_digits - x_padding) / 2;
+
+    for (int i{ 0 }; i < high_score_table.size(); i++) {
+        std::string name = high_score_table.at(i).getName();
+        drawString(x_pos_name, y_pos + y_padding * i, name);
+
+        std::string score = std::to_string(high_score_table.at(i).getScore());
+        const int x_pos_score = x_pos_name + name.size() + x_padding - score.size();
+        drawString(x_pos_score, y_pos + y_padding * i, score);
+    }
+
+    y_pos_end = y_pos + y_padding * high_score_table.size();
 }
 
 
@@ -580,41 +698,15 @@ void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo) {
 }
 
 
-void drawShields(const std::vector<Shield>& shields) {
-    for (const auto& shield : shields) {
-        shield.draw();
-    }
+void addScore(std::vector<Score>& high_score_table, const std::string& name, const int& score) {
+    Score high_score;
+    high_score.setName(name);
+    high_score.setScore(score);
+
+    high_score_table.push_back(high_score);
+    std::sort(high_score_table.begin(), high_score_table.end(), scoreCompare); // Descending order
 }
 
-void drawAlienSwarm(const AlienSwarm& alien_swarm) {
-    for (auto& alien_row : alien_swarm.getAliens()) {
-        for (auto& alien : alien_row) {
-            alien.setSpriteDependingOnState();
-            alien.draw();
-        }
-    }
-}
-
-void drawBombs(const AlienSwarm& alien_swarm) {
-    for (auto& bomb : alien_swarm.getBombs()) {
-        bomb.draw();
-    }
-}
-
-void drawGameStats(const Game& game, const Player& player) {
-    std::string line_score{ "Score: " };
-    std::string line_level{ "LEVEL " };
-    std::string line_lives{ "Lives: " };
-
-    line_score += std::to_string(player.getScore());
-    line_level += std::to_string(game.getLevel());
-    line_lives += std::to_string(player.getLives());
-
-    const int x_pos_score = 0;
-    const int x_pos_level = (game.getWindowSize().width - line_level.size()) / 2;
-    const int x_pos_lives = game.getWindowSize().width - line_lives.size();
-
-    drawString(x_pos_score, 0, line_score);
-    drawString(x_pos_level, 0, line_level);
-    drawString(x_pos_lives, 0, line_lives);
+bool scoreCompare(const Score& score_1, const Score& score_2) {
+    return score_1.getScore() > score_2.getScore();
 }

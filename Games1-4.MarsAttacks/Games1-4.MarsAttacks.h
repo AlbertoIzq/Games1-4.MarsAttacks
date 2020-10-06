@@ -149,6 +149,7 @@ vector of scores
 #include "Shield.h"
 #include "AlienSwarm.h"
 #include "AlienUFO.h"
+#include "Score.h"
 
 #include <iostream>
 #include <string>
@@ -162,16 +163,16 @@ using std::string;
 
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 
-int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo); // Returns int value due to Arrow keys
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table); // Returns int value due to Arrow keys
 void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
-void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens, const AlienUFO& ufo);
+void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens, const AlienUFO& ufo, const std::vector<Score>& high_score_table);
 
 void handleInputI(Game& game);
 void handleInputLeft(Game& game, Player& player);
 void handleInputRight(Game& game, Player& player);
 void handleInputUp(Game& game);
 void handleInputDown(Game& game);
-void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
+void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table);
 
 void updateMissile(Player& player, std::vector<Shield>& shields);
 void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
@@ -181,6 +182,13 @@ void drawIntroScreen(const Game& game);
 void drawInstructionsScreen1(const Game& game);
 void drawInstructionsScreen2(const Game& game);
 void drawGameOverScreen(const Game& game);
+void drawHighScoresScreen(const Game& game, const std::vector<Score>& high_score_table);
+
+void drawShields(const std::vector<Shield>& shields);
+void drawAlienSwarm(const AlienSwarm& alien_swarm);
+void drawBombs(const AlienSwarm& alien_swarm);
+void drawGameStats(const Game& game, const Player& player);
+void drawHighScoreTable(const Game& game, const std::vector<Score>& high_score_table, const int& y_pos, int& y_pos_end);
 
 void resetLevel(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
 void resetGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
@@ -207,20 +215,9 @@ bool isCollision(const Position& projectile, const Position& object_position, co
 
 void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo);
 
-void drawShields(const std::vector<Shield>& shields);
-void drawAlienSwarm(const AlienSwarm& alien_swarm);
-void drawBombs(const AlienSwarm& alien_swarm);
-void drawGameStats(const Game& game, const Player& player);
+void addScore(std::vector<Score>& high_score_table, const std::string& name, const int& score);
+bool scoreCompare(const Score& score_1, const Score& score_2); // Descending order
 
 /// <summary>
 /// ////////////////////////////////////////////////////
 /// </summary>
-
-struct Score {
-	int score;
-	string name;
-};
-
-struct HighScoreTable {
-	std::vector<Score> scores;
-};

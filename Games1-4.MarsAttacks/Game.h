@@ -11,8 +11,8 @@ enum class Game_State
  	GS_PLAYER_DEAD, // When player gets hits and dies
 	GS_WAIT, // Game waits while player revives; Game waits before going to the next level
 	//GS_PAUSE, // TODO
-	GS_HIGH_SCORES,
-	GS_GAME_OVER
+	GS_GAME_OVER,
+	GS_HIGH_SCORES
 };
 
 class Game
@@ -46,6 +46,7 @@ public:
 	inline Game_State getCurrentState() const { return currentState; }
 	inline int getLevel() const { return level; }
 	inline int getWaitTimer() const { return waitTimer; }
+	inline std::string getPlayerName() const { return playerName; }
 
 	// SET METHODS
 	inline void setCurrentState(Game_State state) { currentState = state; }
