@@ -26,7 +26,7 @@ private:
 	static constexpr int DEF_WINDOW_HEIGHT{ 40 };
 	static constexpr int DEF_WINDOW_WIDTH_PIXELS{ 526 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size in pixels, get the value in setConsoleWindowSize
 	static constexpr int DEF_WINDOW_HEIGHT_PIXELS{ 614 };
-	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_GAME_OVER }; // for now - TODO: Change to GS_INTRO
+	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_INTRO };
 	static constexpr int DEF_LEVEL{ 1 };
 
 protected:

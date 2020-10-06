@@ -14,7 +14,8 @@
 enum {
 	DEF_FPS = 30,
 	DEF_NOT_IN_PLAY = -1,
-	DEF_MAX_ALPHABET_CHARS = 26
+	DEF_MAX_ALPHABET_CHARS = 26,
+	DEF_MAX_SCORES = 10
 };
 
 struct Position {

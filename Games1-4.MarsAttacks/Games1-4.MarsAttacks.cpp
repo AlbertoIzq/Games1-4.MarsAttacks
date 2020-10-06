@@ -5,10 +5,13 @@
 #include <cmath> // For computing shields padding
 #include <vector>
 #include <algorithm> // To sort high scores table
+#include <fstream> // For file I/O
+#include <iostream>
 
 int main(void)
 {
-    srand(time(NULL));
+    srand(static_cast<unsigned>(time(NULL)));
+    const std::string DEF_FILE_NAME{ "TextInvaders-HighScores.txt" };
 
     Game game;
     Player player;
@@ -16,6 +19,8 @@ int main(void)
     AlienSwarm alien_swarm(game);
     AlienUFO ufo;
     std::vector<Score> high_score_table;
+
+    loadHighScores(high_score_table, DEF_FILE_NAME);
 
     initializeCurses(true); // PDCurses
 
@@ -25,7 +30,7 @@ int main(void)
     clock_t last_time = clock();
 
     do {
-        input = handleInput(game, player, shields, alien_swarm, ufo, high_score_table);
+        input = handleInput(game, player, shields, alien_swarm, ufo, high_score_table, DEF_FILE_NAME);
         if (input != 'e') {
             clock_t current_time = clock();
             clock_t dt = current_time - last_time;
@@ -74,7 +79,7 @@ std::vector<Shield> iniShields(const Game& game, const Player& player) {
 }
 
 
-int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table) {
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table, const std::string& file_name) {
     int input = getChar();
     switch (input)
     {
@@ -96,7 +101,7 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
         handleInputDown(game);
         break;
     case ' ':
-        handleInputSpace(game, player, shields, alien_swarm, ufo, high_score_table);
+        handleInputSpace(game, player, shields, alien_swarm, ufo, high_score_table, file_name);
         break;
     default:
         break;
@@ -198,7 +203,7 @@ void handleInputDown(Game& game) {
     }
 }
 
-void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table) {
+void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table, const std::string& file_name) {
     if (game.getCurrentState() == Game_State::GS_INTRO ||
         game.getCurrentState() == Game_State::GS_INSTRUCTIONS_1 ||
         game.getCurrentState() == Game_State::GS_INSTRUCTIONS_2) {
@@ -217,7 +222,7 @@ void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, 
         }
     }
     else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
-        addScore(high_score_table, game.getPlayerName(), player.getScore());
+        addScore(high_score_table, game.getPlayerName(), player.getScore(), file_name);
         game.setCurrentState(Game_State::GS_HIGH_SCORES);
     }
     else if (game.getCurrentState() == Game_State::GS_HIGH_SCORES) {
@@ -248,7 +253,7 @@ void updateUFO(const Game& game, Player& player, AlienUFO& ufo) {
 
 
 void drawIntroScreen(const Game& game) {
-    std::vector<std::string> header{ "Release date: 07/10/2020" ,
+    std::vector<std::string> header{ "Release date: 06/10/2020" ,
                                      "Author: Alberto Izquierdo aka Albertroll",
                                      "Copyright-All lefts reserved" };
     drawSprite(0, 0, header);
@@ -308,7 +313,7 @@ void drawInstructionsScreen2(const Game& game) {
     const int y_pos_1 = 4;
     const int x_pos = 1;
 
-    for (int i{ 0 }; i < instructions_1.size(); i++) {
+    for (unsigned i{ 0 }; i < instructions_1.size(); i++) {
         drawString(x_pos, y_pos_1 + i, instructions_1.at(i));
     }
 
@@ -326,7 +331,7 @@ void drawInstructionsScreen2(const Game& game) {
     
     const int y_pos_2 = y_pos_header_2 + 2;
 
-    for (int i{ 0 }; i < instructions_2.size(); i++) {
+    for (unsigned i{ 0 }; i < instructions_2.size(); i++) {
         drawString(x_pos, y_pos_2 + i, instructions_2.at(i));
     }
     
@@ -427,7 +432,7 @@ void drawHighScoreTable(const Game& game, const std::vector<Score>& high_score_t
     const int score_max_digits{ 4 };
     const int x_pos_name = (game.getWindowSize().width - Score::DEF_MAX_CHAR_NAME_SCORE - score_max_digits - x_padding) / 2;
 
-    for (int i{ 0 }; i < high_score_table.size(); i++) {
+    for (unsigned i{ 0 }; i < high_score_table.size() && i < DEF_MAX_SCORES; i++) {
         std::string name = high_score_table.at(i).getName();
         drawString(x_pos_name, y_pos + y_padding * i, name);
 
@@ -698,15 +703,94 @@ void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo) {
 }
 
 
-void addScore(std::vector<Score>& high_score_table, const std::string& name, const int& score) {
+void addScore(std::vector<Score>& high_score_table, const std::string& name, const int& score, const std::string& file_name) {
     Score high_score;
     high_score.setName(name);
     high_score.setScore(score);
 
     high_score_table.push_back(high_score);
     std::sort(high_score_table.begin(), high_score_table.end(), scoreCompare); // Descending order
+
+    saveHighScores(high_score_table, file_name);
 }
 
 bool scoreCompare(const Score& score_1, const Score& score_2) {
     return score_1.getScore() > score_2.getScore();
+}
+
+
+void saveHighScores(const std::vector<Score>& high_score_table, const std::string& file_name) {
+    std::ofstream out_file;
+    out_file.open(file_name);
+
+    if (out_file.is_open()) {
+        for (unsigned i{ 0 }; i < high_score_table.size() && i < DEF_MAX_SCORES; i++) {
+            out_file << high_score_table.at(i).getName() << " " << high_score_table.at(i).getScore() << std::endl;
+        }
+        out_file.close();
+    }
+    
+    /*BINARY FILE - NOT WORKING
+    
+    std::ofstream out_file;
+    out_file.open(DEF_FILE_NAME, std::fstream::binary);
+
+    Score score_array[DEF_MAX_SCORES];
+
+    for (int i = 0; i < DEF_MAX_SCORES; i++) {
+        if (i < high_score_table.size()) {
+            score_array[i].setName(high_score_table.at(i).getName());
+            score_array[i].setScore(high_score_table.at(i).getScore());
+        }
+        else {
+            Score score;
+            score_array[i] = score;
+        }
+    }
+
+    for (int i{ 0 }; i < DEF_MAX_SCORES; i++)
+        out_file.write((char*)&score_array[i], sizeof(Score));
+
+    out_file.close();*/
+}
+
+void loadHighScores(std::vector<Score>& high_score_table, const std::string& file_name) {
+    std::ifstream in_file;
+    in_file.open(file_name);
+
+    Score score;
+    std::string name;
+    int score_val;
+
+
+    if (in_file.is_open()) {
+        while (!in_file.eof()) {
+            in_file >> std::ws;
+            if (in_file.eof()) {
+                break;
+            }
+            in_file >> name >> score_val;
+            score.setName(name);
+            score.setScore(score_val);
+
+            high_score_table.push_back(score);
+        }
+        in_file.close();
+    }
+
+    /*BINARY FILE - NOT WORKING
+
+    std::ifstream in_file;
+    in_file.open(DEF_FILE_NAME, std::fstream::binary);
+
+    Score score_array[DEF_MAX_SCORES];
+
+    for (int i = 0; i < 3; i++)
+        in_file.read((char*)&score_array[i], sizeof(Score));
+    in_file.close();
+
+    for (int i = 0; i < DEF_MAX_SCORES; i++) {
+        high_score_table.at(i).setName(score_array[i].getName());
+        high_score_table.at(i).setScore(score_array[i].getScore());
+    }*/
 }

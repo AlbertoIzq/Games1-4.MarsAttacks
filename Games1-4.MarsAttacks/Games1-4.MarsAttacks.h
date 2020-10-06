@@ -163,7 +163,7 @@ using std::string;
 
 std::vector<Shield> iniShields(const Game& game, const Player& player);
 
-int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table); // Returns int value due to Arrow keys
+int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table, const std::string& file_name); // Returns int value due to Arrow keys
 void updateGame(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo);
 void drawGame(const Game& game, const Player& player, const std::vector<Shield>& shields, const AlienSwarm& aliens, const AlienUFO& ufo, const std::vector<Score>& high_score_table);
 
@@ -172,7 +172,7 @@ void handleInputLeft(Game& game, Player& player);
 void handleInputRight(Game& game, Player& player);
 void handleInputUp(Game& game);
 void handleInputDown(Game& game);
-void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table);
+void handleInputSpace(Game& game, Player& player, std::vector<Shield>& shields, AlienSwarm& alien_swarm, AlienUFO& ufo, std::vector<Score>& high_score_table, const std::string& file_name);
 
 void updateMissile(Player& player, std::vector<Shield>& shields);
 void updateAlienSwarm(Game& game, Player& player, AlienSwarm& alien_swarm, std::vector<Shield>& shields);
@@ -215,8 +215,11 @@ bool isCollision(const Position& projectile, const Position& object_position, co
 
 void checkResolveUFOMissileCollision(Player& player, AlienUFO& ufo);
 
-void addScore(std::vector<Score>& high_score_table, const std::string& name, const int& score);
+void addScore(std::vector<Score>& high_score_table, const std::string& name, const int& score, const std::string& file_name);
 bool scoreCompare(const Score& score_1, const Score& score_2); // Descending order
+
+void saveHighScores(const std::vector<Score>& high_score_table, const std::string& file_name);
+void loadHighScores(std::vector<Score>& high_score_table, const std::string& file_name);
 
 /// <summary>
 /// ////////////////////////////////////////////////////
