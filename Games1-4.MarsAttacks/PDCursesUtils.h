@@ -25,3 +25,6 @@ void moveCursor(const int& x_pos, const int& y_pos);
 void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character);
 void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite);
 void drawString(const int& x_pos, const int& y_pos, std::string& string_text);
+
+void setBrightBackText();
+void unsetBrightBackText();

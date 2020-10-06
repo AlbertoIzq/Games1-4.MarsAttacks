@@ -54,3 +54,11 @@ void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::strin
 void drawString(const int& x_pos, const int& y_pos, std::string& string_text) {
 	mvprintw(y_pos, x_pos, "%s", string_text.c_str());
 }
+
+void setBrightBackText() {
+	attron(A_BLINK);
+}
+
+void unsetBrightBackText() {
+	attroff(A_BLINK);
+}

@@ -24,7 +24,7 @@ int main(void)
 
     do {
         input = handleInput(game, player, shields, alien_swarm, ufo);
-        if (input != 'q') {
+        if (input != 'e') {
             clock_t current_time = clock();
             clock_t dt = current_time - last_time;
 
@@ -76,7 +76,7 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
     int input = getChar();
     switch (input)
     {
-    case 'q':
+    case 'e':
         return input;
     case 'i':
         if (game.getCurrentState() == Game_State::GS_INTRO) {
@@ -90,10 +90,26 @@ int handleInput(Game& game, Player& player, std::vector<Shield>& shields, AlienS
         if (game.getCurrentState() == Game_State::GS_PLAY) {
             player.move(game, false);
         }
+        else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+            game.moveNameLetterLeft();
+        }
         break;
     case AK_RIGHT:
         if (game.getCurrentState() == Game_State::GS_PLAY) {
             player.move(game, true);
+        }
+        else if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+            game.moveNameLetterRight();
+        }
+        break;
+    case AK_UP:
+        if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+            game.moveNameLetterUp();
+        }
+        break;
+    case AK_DOWN:
+        if (game.getCurrentState() == Game_State::GS_GAME_OVER) {
+            game.moveNameLetterDown();
         }
         break;
     case ' ':
@@ -249,22 +265,34 @@ void drawInstructionsScreen2(const Game& game) {
 }
 
 void drawGameOverScreen(const Game& game) {
-    std::string line_1{ "GAME OVER" };
-    std::string line_2{ "Some damned invaders have just killed you and conquered Earth!" };
+    std::string line_game_over_1{ "GAME OVER" };
+    std::string line_game_over_2{ "Some damned invaders have just killed you and conquered Earth!" };
 
-    std::string line_3{ "You have 2 options:" };
-    std::string line_4{ "- Press Q key to exit the game and go cry somewhere else" };
-    std::string line_5{ "- Press Space bar and take revenge by killing all those bastards!!" };
+    const int y_pos_game_over_1 = game.getWindowSize().height / 3;
+    const int x_pos_game_over_1 = (game.getWindowSize().width - line_game_over_1.size()) / 2;
+    const int x_pos_game_over_2 = (game.getWindowSize().width - line_game_over_2.size()) / 2;
 
-    const int y_pos = game.getWindowSize().height / 2;
-    const int x_pos_1 = (game.getWindowSize().width - line_1.size()) / 2;
-    const int x_pos_2 = (game.getWindowSize().width - line_2.size()) / 2;
+    drawString(x_pos_game_over_1, y_pos_game_over_1, line_game_over_1);
+    drawString(x_pos_game_over_2, y_pos_game_over_1 + 2, line_game_over_2);
 
-    drawString(x_pos_1, y_pos, line_1);
-    drawString(x_pos_2, y_pos + 2, line_2);
-    drawString(x_pos_2, y_pos + 4, line_3);
-    drawString(x_pos_2, y_pos + 5, line_4);
-    drawString(x_pos_2, y_pos + 6, line_5);
+    std::string line_name_1{ "Please enter your shitty name:" };
+
+    const int x_pos_name_1 = (game.getWindowSize().width - line_name_1.size()) / 2;
+    const int x_pos_name_2 = (game.getWindowSize().width - DEF_MAX_CHAR_NAME_SCORE) / 2;
+
+    drawString(x_pos_name_1, y_pos_game_over_1 + 5, line_name_1);
+    game.drawPlayerName(x_pos_name_2, y_pos_game_over_1 + 6);
+
+    std::string line_op_1{ "You have 2 options:" };
+    std::string line_op_2{ "- Press E key to exit the game and go cry somewhere else" };
+    std::string line_op_3{ "- Press Space bar to take revenge by killing all those bastards!!" };
+    
+    const int y_pos_op_1 = game.getWindowSize().height *2 / 3;
+    const int x_pos_op_1 = (game.getWindowSize().width - line_op_3.size()) / 2;
+
+    drawString(x_pos_game_over_2, y_pos_op_1, line_op_1);
+    drawString(x_pos_game_over_2, y_pos_op_1 + 1, line_op_2);
+    drawString(x_pos_game_over_2, y_pos_op_1 + 2, line_op_3); 
 }
 
 

@@ -26,13 +26,18 @@ private:
 	static constexpr int DEF_WINDOW_HEIGHT{ 40 };
 	static constexpr int DEF_WINDOW_WIDTH_PIXELS{ 526 }; // Values obtained by setting console size manually when running the program to have DEF_WINDOW size in pixels, get the value in setConsoleWindowSize
 	static constexpr int DEF_WINDOW_HEIGHT_PIXELS{ 614 };
-	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_INTRO }; // for now - TODO: Change to GS_INTRO
+	static constexpr Game_State DEF_GAME_STATE{ Game_State::GS_GAME_OVER }; // for now - TODO: Change to GS_INTRO
 	static constexpr int DEF_LEVEL{ 1 };
+
 protected:
 	Size windowSize;
 	Game_State currentState;
 	int level;
 	int waitTimer; // Timer to wait when player gets hit or game goes to next level
+
+	int playerNameHPositionCursor;
+	std::vector<int> playerNameVPositionCursor; // To store in each letter where we were
+	std::string playerName;
 public:
 	Game();
 
@@ -50,4 +55,10 @@ public:
 	void setConsoleWindowSize(); // Sets window size to default values
 	void resetLevel();
 	void resetAll();
+
+	void drawPlayerName(const int& pos_x, const int& pos_y) const;
+	void moveNameLetterRight();
+	void moveNameLetterLeft();
+	void moveNameLetterUp();
+	void moveNameLetterDown();
 };

@@ -15,8 +15,8 @@ public:
 	static const int DEF_POSITION_Y_OFFSET_DOWN{ 1 };
 private:
 	static const Position DEF_INI_POSITION; // Initialized in .cpp
-	static const int DEF_INI_POSITION_X;
-	static const int DEF_INI_POSITION_Y;
+	static const int DEF_INI_POSITION_X; // Initialized in .cpp
+	static const int DEF_INI_POSITION_Y; // Initialized in .cpp
 	
 	static constexpr int DEF_SPRITE_WIDTH{ 5 };
 	static constexpr int DEF_SPRITE_HEIGHT{ 2 };
