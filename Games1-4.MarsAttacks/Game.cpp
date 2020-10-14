@@ -6,7 +6,7 @@ const Size Game::DEF_WINDOW_SIZE{ DEF_WINDOW_WIDTH, DEF_WINDOW_HEIGHT };
 
 Game::Game()
     : windowSize{ DEF_WINDOW_SIZE }, currentState{ DEF_GAME_STATE }, level{ DEF_LEVEL }, waitTimer{ DEF_WAIT_TIMER },
-    playerNameHPositionCursor{0 } {
+    playerNameHPositionCursor{ 0 } {
     setConsoleWindowSize();
 
     for (int i{ 0 }; i < Score::DEF_MAX_CHAR_NAME_SCORE; i++) {
@@ -16,13 +16,7 @@ Game::Game()
 }
 
 void Game::setConsoleWindowSize() {
-    HWND console = GetConsoleWindow();
-    RECT r;
-    GetWindowRect(console, &r); //stores the console's current dimensions  
-    int width{ r.right - r.left }; // Used to get width and height in pixels to feed manually class constants
-    int height{ r.bottom - r.top};
-    // MoveWindow(window_handle, x, y, width, height, redraw_window);
-    MoveWindow(console, r.left, r.top, DEF_WINDOW_WIDTH_PIXELS, DEF_WINDOW_HEIGHT_PIXELS, TRUE);
+    resizeScreen(DEF_WINDOW_SIZE.height, DEF_WINDOW_SIZE.width);
 }
 
 void Game::resetLevel() {

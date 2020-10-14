@@ -19,8 +19,9 @@ void refreshScreen();
 
 int screenWidth();
 int screenHeight();
-int getChar();
+void resizeScreen(const int& rows, const int& cols);
 void moveCursor(const int& x_pos, const int& y_pos);
+int getChar();
 
 void drawCharacter(const int& x_pos, const int& y_pos, const char& a_character);
 void drawSprite(const int& x_pos, const int& y_pos, const std::vector<std::string>& sprite);

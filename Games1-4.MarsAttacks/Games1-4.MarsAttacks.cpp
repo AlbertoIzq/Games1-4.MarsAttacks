@@ -13,6 +13,8 @@ int main(void)
     srand(static_cast<unsigned>(time(NULL)));
     const std::string DEF_FILE_NAME{ "TextInvaders-HighScores.txt" };
 
+    initializeCurses(true); // PDCurses, before game object to be able to resize screen
+
     Game game;
     Player player;
     std::vector<Shield> shields = iniShields(game, player);
@@ -21,8 +23,6 @@ int main(void)
     std::vector<Score> high_score_table;
 
     loadHighScores(high_score_table, DEF_FILE_NAME);
-
-    initializeCurses(true); // PDCurses
 
     bool quit = false;
     char input;
@@ -253,7 +253,7 @@ void updateUFO(const Game& game, Player& player, AlienUFO& ufo) {
 
 
 void drawIntroScreen(const Game& game) {
-    std::vector<std::string> header{ "Release date: 06/10/2020" ,
+    std::vector<std::string> header{ "Release date: 14/10/2020 v1.0" ,
                                      "Author: Alberto Izquierdo aka Albertroll",
                                      "Copyright-All lefts reserved" };
     drawSprite(0, 0, header);
@@ -323,7 +323,7 @@ void drawInstructionsScreen2(const Game& game) {
     drawString(x_pos_header_2, y_pos_header_2, line_header_2);
     
     std::vector<string> instructions_2{
-        {"- Space bar => To shoot those bastards "},
+        {"- Space bar => To shoot those bastards and resume the game after being hit"},
         {"- Left arrow key => Move to the left"},
         {"- Right arrow key => Move to the right"},
         {"- E key => Exit the game"}
