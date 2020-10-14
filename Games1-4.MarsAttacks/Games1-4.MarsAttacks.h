@@ -142,8 +142,6 @@ vector of scores
 
 #pragma once
 
-#include "StaticLib-Utils.h"
-
 #include "Game.h"
 #include "Player.h"
 #include "Shield.h"
