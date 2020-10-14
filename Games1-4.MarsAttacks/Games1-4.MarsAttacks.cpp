@@ -324,8 +324,10 @@ void drawInstructionsScreen2(const Game& game) {
     
     std::vector<string> instructions_2{
         {"- Space bar => To shoot those bastards and resume the game after being hit"},
-        {"- Left arrow key => Move to the left"},
-        {"- Right arrow key => Move to the right"},
+        {"- Left arrow key => Move to the left and change letter in high scores screen"},
+        {"- Right arrow key => Move to the right and change letter in high scores screen"},
+        {"- Up arrow key => Select above letter in the alphabet in high scores screen"},
+        {"- Down arrow key => Select below letter in the alphabet in high scores screen"},
         {"- E key => Exit the game"}
     };
     
