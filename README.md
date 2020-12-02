@@ -1,6 +1,9 @@
 # Games1-4.MarsAttacks
 Mars Attacks game with a swear words touch
 
+Check "Screenshots" folder to see how the game works
+Check "Text Invaders" folder for installation package
+
 _____BUGS LIST_____
 
 -2020/01/10 Alien swarm movement
